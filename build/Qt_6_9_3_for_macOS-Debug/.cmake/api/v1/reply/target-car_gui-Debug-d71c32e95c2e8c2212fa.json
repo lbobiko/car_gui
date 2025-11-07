@@ -69,13 +69,13 @@
 			{
 				"command" : 4,
 				"file" : 1,
-				"line" : 65,
+				"line" : 69,
 				"parent" : 0
 			},
 			{
 				"command" : 5,
 				"file" : 1,
-				"line" : 48,
+				"line" : 52,
 				"parent" : 0
 			},
 			{
@@ -216,7 +216,7 @@
 			"compileCommandFragments" : 
 			[
 				{
-					"fragment" : "-DQT_QML_DEBUG -g -std=gnu++17 -arch arm64 -isysroot /Applications/Xcode.app/Contents/Developer/Platforms/MacOSX.platform/Developer/SDKs/MacOSX26.0.sdk -fcolor-diagnostics"
+					"fragment" : "-DQT_QML_DEBUG -g -std=gnu++17 -arch arm64 -isysroot /Applications/Xcode.app/Contents/Developer/Platforms/MacOSX.platform/Developer/SDKs/MacOSX26.1.sdk -mmacosx-version-min=26.0 -fcolor-diagnostics"
 				}
 			],
 			"defines" : 
@@ -301,7 +301,10 @@
 				2,
 				6,
 				8,
-				10
+				10,
+				13,
+				15,
+				17
 			]
 		}
 	],
@@ -421,7 +424,10 @@
 				2,
 				6,
 				8,
-				10
+				10,
+				13,
+				15,
+				17
 			]
 		},
 		{
@@ -432,7 +438,11 @@
 				5,
 				7,
 				9,
-				11
+				11,
+				12,
+				14,
+				16,
+				18
 			]
 		},
 		{
@@ -446,14 +456,14 @@
 			"name" : "",
 			"sourceIndexes" : 
 			[
-				12
+				19
 			]
 		},
 		{
 			"name" : "CMake Rules",
 			"sourceIndexes" : 
 			[
-				13
+				20
 			]
 		}
 	],
@@ -519,6 +529,44 @@
 			"backtrace" : 4,
 			"compileGroupIndex" : 0,
 			"path" : "Brake.cpp",
+			"sourceGroupIndex" : 0
+		},
+		{
+			"backtrace" : 4,
+			"path" : "Constants.h",
+			"sourceGroupIndex" : 1
+		},
+		{
+			"backtrace" : 4,
+			"path" : "FuelTank.h",
+			"sourceGroupIndex" : 1
+		},
+		{
+			"backtrace" : 4,
+			"compileGroupIndex" : 0,
+			"path" : "FuelTank.cpp",
+			"sourceGroupIndex" : 0
+		},
+		{
+			"backtrace" : 4,
+			"path" : "Transmission.h",
+			"sourceGroupIndex" : 1
+		},
+		{
+			"backtrace" : 4,
+			"compileGroupIndex" : 0,
+			"path" : "Transmission.cpp",
+			"sourceGroupIndex" : 0
+		},
+		{
+			"backtrace" : 4,
+			"path" : "Dashboard.h",
+			"sourceGroupIndex" : 1
+		},
+		{
+			"backtrace" : 4,
+			"compileGroupIndex" : 0,
+			"path" : "Dashboard.cpp",
 			"sourceGroupIndex" : 0
 		},
 		{

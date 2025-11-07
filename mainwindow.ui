@@ -14,111 +14,148 @@
    <string>MainWindow</string>
   </property>
   <widget class="QWidget" name="centralwidget">
-   <widget class="QWidget" name="horizontalLayoutWidget">
+   <widget class="QPushButton" name="engineButton">
     <property name="geometry">
      <rect>
       <x>30</x>
-      <y>420</y>
-      <width>751</width>
-      <height>71</height>
+      <y>460</y>
+      <width>151</width>
+      <height>41</height>
      </rect>
     </property>
-    <layout class="QHBoxLayout" name="horizontalLayout">
-     <item>
-      <widget class="QPushButton" name="engineButton">
-       <property name="text">
-        <string>Engine ON/OFF</string>
-       </property>
-      </widget>
-     </item>
-     <item>
-      <widget class="QPushButton" name="throttleButton">
-       <property name="text">
-        <string>Throttle</string>
-       </property>
-      </widget>
-     </item>
-     <item>
-      <widget class="QPushButton" name="brakeButton">
-       <property name="text">
-        <string>Brake</string>
-       </property>
-      </widget>
-     </item>
-    </layout>
+    <property name="text">
+     <string>Engine ON/OFF</string>
+    </property>
    </widget>
-   <widget class="QWidget" name="horizontalLayoutWidget_2">
+   <widget class="QPushButton" name="throttleButton">
     <property name="geometry">
      <rect>
-      <x>30</x>
+      <x>590</x>
+      <y>460</y>
+      <width>151</width>
+      <height>41</height>
+     </rect>
+    </property>
+    <property name="text">
+     <string>Throttle</string>
+    </property>
+   </widget>
+   <widget class="QPushButton" name="brakeButton">
+    <property name="geometry">
+     <rect>
+      <x>410</x>
+      <y>460</y>
+      <width>151</width>
+      <height>41</height>
+     </rect>
+    </property>
+    <property name="text">
+     <string>Brake</string>
+    </property>
+   </widget>
+   <widget class="QLabel" name="speedInfo">
+    <property name="geometry">
+     <rect>
+      <x>210</x>
+      <y>280</y>
+      <width>111</width>
+      <height>41</height>
+     </rect>
+    </property>
+    <property name="text">
+     <string>speed</string>
+    </property>
+   </widget>
+   <widget class="QLabel" name="speedText">
+    <property name="geometry">
+     <rect>
+      <x>210</x>
       <y>340</y>
-      <width>751</width>
-      <height>71</height>
+      <width>131</width>
+      <height>31</height>
      </rect>
     </property>
-    <layout class="QHBoxLayout" name="horizontalLayout_2">
-     <item>
-      <widget class="QLabel" name="engineInfo">
-       <property name="text">
-        <string/>
-       </property>
-      </widget>
-     </item>
-     <item>
-      <widget class="QLabel" name="throttleInfo">
-       <property name="text">
-        <string/>
-       </property>
-      </widget>
-     </item>
-     <item>
-      <widget class="QLabel" name="brakeInfo">
-       <property name="text">
-        <string/>
-       </property>
-      </widget>
-     </item>
-    </layout>
+    <property name="text">
+     <string>SPEED</string>
+    </property>
    </widget>
-   <widget class="QWidget" name="horizontalLayoutWidget_3">
+   <widget class="QLabel" name="distanceText">
+    <property name="geometry">
+     <rect>
+      <x>10</x>
+      <y>10</y>
+      <width>141</width>
+      <height>41</height>
+     </rect>
+    </property>
+    <property name="text">
+     <string>Distance travelled:</string>
+    </property>
+   </widget>
+   <widget class="QLabel" name="distanceInfo">
+    <property name="geometry">
+     <rect>
+      <x>160</x>
+      <y>10</y>
+      <width>111</width>
+      <height>41</height>
+     </rect>
+    </property>
+    <property name="text">
+     <string>0</string>
+    </property>
+   </widget>
+   <widget class="QLabel" name="engineInfo">
     <property name="geometry">
      <rect>
       <x>30</x>
-      <y>220</y>
-      <width>751</width>
-      <height>91</height>
+      <y>400</y>
+      <width>121</width>
+      <height>41</height>
      </rect>
     </property>
-    <layout class="QHBoxLayout" name="horizontalLayout_3">
-     <item>
-      <widget class="QLabel" name="speedText">
-       <property name="text">
-        <string>Current speed:</string>
-       </property>
-      </widget>
-     </item>
-     <item>
-      <widget class="QLabel" name="speedInfo">
-       <property name="text">
-        <string/>
-       </property>
-      </widget>
-     </item>
-     <item>
-      <widget class="QLabel" name="distanceText">
-       <property name="text">
-        <string>Distance travelled:</string>
-       </property>
-      </widget>
-     </item>
-     <item>
-      <widget class="QLabel" name="distanceInfo">
-       <property name="text">
-        <string/>
-       </property>
-      </widget>
-     </item>
-    </layout>
+    <property name="text">
+     <string>Engine OFF</string>
+    </property>
+   </widget>
+   <widget class="QLabel" name="throttleInfo">
+    <property name="geometry">
+     <rect>
+      <x>590</x>
+      <y>370</y>
+      <width>151</width>
+      <height>41</height>
+     </rect>
+    </property>
+    <property name="text">
+     <string/>
+    </property>
+   </widget>
+   <widget class="QLabel" name="throttleDetail">
+    <property name="geometry">
+     <rect>
+      <x>590</x>
+      <y>410</y>
+      <width>151</width>
+      <height>41</height>
+     </rect>
+    </property>
+    <property name="text">
+     <string>0</string>
+    </property>
+   </widget>
+   <widget class="QLabel" name="brakeInfo">
+    <property name="geometry">
+     <rect>
+      <x>410</x>
+      <y>410</y>
+      <width>151</width>
+      <height>41</height>
+     </rect>
+    </property>
+    <property name="text">
+     <string/>
+    </property>
    </widget>
   </widget>
   <widget class="QMenuBar" name="menubar">

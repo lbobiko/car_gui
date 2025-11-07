@@ -29,8 +29,12 @@ private slots:
 private:
     Ui::MainWindow *ui;
     Car car;
+    void updateSimulation();
+    void carUpdate(double dt);
     void refreshUI();  // odświeża wszystkie labele
     void setStatus(QLabel* lbl, const QString& text, const QString& color);
+    QTimer *timer;
+    //int counter = 0;
 
 
 };

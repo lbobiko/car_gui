@@ -11,7 +11,6 @@
 
 #include <QtCore/QVariant>
 #include <QtWidgets/QApplication>
-#include <QtWidgets/QHBoxLayout>
 #include <QtWidgets/QLabel>
 #include <QtWidgets/QMainWindow>
 #include <QtWidgets/QMenuBar>
@@ -25,22 +24,17 @@ class Ui_MainWindow
 {
 public:
     QWidget *centralwidget;
-    QWidget *horizontalLayoutWidget;
-    QHBoxLayout *horizontalLayout;
     QPushButton *engineButton;
     QPushButton *throttleButton;
     QPushButton *brakeButton;
-    QWidget *horizontalLayoutWidget_2;
-    QHBoxLayout *horizontalLayout_2;
-    QLabel *engineInfo;
-    QLabel *throttleInfo;
-    QLabel *brakeInfo;
-    QWidget *horizontalLayoutWidget_3;
-    QHBoxLayout *horizontalLayout_3;
-    QLabel *speedText;
     QLabel *speedInfo;
+    QLabel *speedText;
     QLabel *distanceText;
     QLabel *distanceInfo;
+    QLabel *engineInfo;
+    QLabel *throttleInfo;
+    QLabel *throttleDetail;
+    QLabel *brakeInfo;
     QMenuBar *menubar;
     QStatusBar *statusbar;
 
@@ -51,74 +45,39 @@ public:
         MainWindow->resize(800, 600);
         centralwidget = new QWidget(MainWindow);
         centralwidget->setObjectName("centralwidget");
-        horizontalLayoutWidget = new QWidget(centralwidget);
-        horizontalLayoutWidget->setObjectName("horizontalLayoutWidget");
-        horizontalLayoutWidget->setGeometry(QRect(30, 420, 751, 71));
-        horizontalLayout = new QHBoxLayout(horizontalLayoutWidget);
-        horizontalLayout->setObjectName("horizontalLayout");
-        horizontalLayout->setContentsMargins(0, 0, 0, 0);
-        engineButton = new QPushButton(horizontalLayoutWidget);
+        engineButton = new QPushButton(centralwidget);
         engineButton->setObjectName("engineButton");
-
-        horizontalLayout->addWidget(engineButton);
-
-        throttleButton = new QPushButton(horizontalLayoutWidget);
+        engineButton->setGeometry(QRect(30, 460, 151, 41));
+        throttleButton = new QPushButton(centralwidget);
         throttleButton->setObjectName("throttleButton");
-
-        horizontalLayout->addWidget(throttleButton);
-
-        brakeButton = new QPushButton(horizontalLayoutWidget);
+        throttleButton->setGeometry(QRect(590, 460, 151, 41));
+        brakeButton = new QPushButton(centralwidget);
         brakeButton->setObjectName("brakeButton");
-
-        horizontalLayout->addWidget(brakeButton);
-
-        horizontalLayoutWidget_2 = new QWidget(centralwidget);
-        horizontalLayoutWidget_2->setObjectName("horizontalLayoutWidget_2");
-        horizontalLayoutWidget_2->setGeometry(QRect(30, 340, 751, 71));
-        horizontalLayout_2 = new QHBoxLayout(horizontalLayoutWidget_2);
-        horizontalLayout_2->setObjectName("horizontalLayout_2");
-        horizontalLayout_2->setContentsMargins(0, 0, 0, 0);
-        engineInfo = new QLabel(horizontalLayoutWidget_2);
-        engineInfo->setObjectName("engineInfo");
-
-        horizontalLayout_2->addWidget(engineInfo);
-
-        throttleInfo = new QLabel(horizontalLayoutWidget_2);
-        throttleInfo->setObjectName("throttleInfo");
-
-        horizontalLayout_2->addWidget(throttleInfo);
-
-        brakeInfo = new QLabel(horizontalLayoutWidget_2);
-        brakeInfo->setObjectName("brakeInfo");
-
-        horizontalLayout_2->addWidget(brakeInfo);
-
-        horizontalLayoutWidget_3 = new QWidget(centralwidget);
-        horizontalLayoutWidget_3->setObjectName("horizontalLayoutWidget_3");
-        horizontalLayoutWidget_3->setGeometry(QRect(30, 220, 751, 91));
-        horizontalLayout_3 = new QHBoxLayout(horizontalLayoutWidget_3);
-        horizontalLayout_3->setObjectName("horizontalLayout_3");
-        horizontalLayout_3->setContentsMargins(0, 0, 0, 0);
-        speedText = new QLabel(horizontalLayoutWidget_3);
-        speedText->setObjectName("speedText");
-
-        horizontalLayout_3->addWidget(speedText);
-
-        speedInfo = new QLabel(horizontalLayoutWidget_3);
+        brakeButton->setGeometry(QRect(410, 460, 151, 41));
+        speedInfo = new QLabel(centralwidget);
         speedInfo->setObjectName("speedInfo");
-
-        horizontalLayout_3->addWidget(speedInfo);
-
-        distanceText = new QLabel(horizontalLayoutWidget_3);
+        speedInfo->setGeometry(QRect(210, 280, 111, 41));
+        speedText = new QLabel(centralwidget);
+        speedText->setObjectName("speedText");
+        speedText->setGeometry(QRect(210, 340, 131, 31));
+        distanceText = new QLabel(centralwidget);
         distanceText->setObjectName("distanceText");
-
-        horizontalLayout_3->addWidget(distanceText);
-
-        distanceInfo = new QLabel(horizontalLayoutWidget_3);
+        distanceText->setGeometry(QRect(10, 10, 141, 41));
+        distanceInfo = new QLabel(centralwidget);
         distanceInfo->setObjectName("distanceInfo");
-
-        horizontalLayout_3->addWidget(distanceInfo);
-
+        distanceInfo->setGeometry(QRect(160, 10, 111, 41));
+        engineInfo = new QLabel(centralwidget);
+        engineInfo->setObjectName("engineInfo");
+        engineInfo->setGeometry(QRect(30, 400, 121, 41));
+        throttleInfo = new QLabel(centralwidget);
+        throttleInfo->setObjectName("throttleInfo");
+        throttleInfo->setGeometry(QRect(590, 370, 151, 41));
+        throttleDetail = new QLabel(centralwidget);
+        throttleDetail->setObjectName("throttleDetail");
+        throttleDetail->setGeometry(QRect(590, 410, 151, 41));
+        brakeInfo = new QLabel(centralwidget);
+        brakeInfo->setObjectName("brakeInfo");
+        brakeInfo->setGeometry(QRect(410, 410, 151, 41));
         MainWindow->setCentralWidget(centralwidget);
         menubar = new QMenuBar(MainWindow);
         menubar->setObjectName("menubar");
@@ -139,13 +98,14 @@ public:
         engineButton->setText(QCoreApplication::translate("MainWindow", "Engine ON/OFF", nullptr));
         throttleButton->setText(QCoreApplication::translate("MainWindow", "Throttle", nullptr));
         brakeButton->setText(QCoreApplication::translate("MainWindow", "Brake", nullptr));
-        engineInfo->setText(QString());
-        throttleInfo->setText(QString());
-        brakeInfo->setText(QString());
-        speedText->setText(QCoreApplication::translate("MainWindow", "Current speed:", nullptr));
-        speedInfo->setText(QString());
+        speedInfo->setText(QCoreApplication::translate("MainWindow", "speed", nullptr));
+        speedText->setText(QCoreApplication::translate("MainWindow", "SPEED", nullptr));
         distanceText->setText(QCoreApplication::translate("MainWindow", "Distance travelled:", nullptr));
-        distanceInfo->setText(QString());
+        distanceInfo->setText(QCoreApplication::translate("MainWindow", "0", nullptr));
+        engineInfo->setText(QCoreApplication::translate("MainWindow", "Engine OFF", nullptr));
+        throttleInfo->setText(QString());
+        throttleDetail->setText(QCoreApplication::translate("MainWindow", "0", nullptr));
+        brakeInfo->setText(QString());
     } // retranslateUi
 
 };

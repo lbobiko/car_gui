@@ -28,7 +28,7 @@ double Car::getThrottle(){
 }
 
 void Car::setThrottle(double t){
-    this->throttle = t;
+    this->throttle = std::clamp(t, 0.0, 1.0);
 }
 
 bool Car::getBrakeStatus(){
@@ -39,6 +39,10 @@ void Car::setBrakeStatus(bool b){
     brake.setBrakePressed(b);
 }
 
-double getDistance(){
+double Car::getDistance(){
     return distance;
+}
+
+double Car::getCurrentSpeed(){
+    return currentSpeed;
 }
