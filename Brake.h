@@ -8,7 +8,7 @@ private:
 
 public:
     Brake();
-    bool getBrakePressed();
+    bool getBrakePressed() const;
     void setBrakePressed(bool);
 };
 

@@ -19,14 +19,14 @@ private:
 public:
     Car();
     std::string getName();
-    double getCurrentSpeed();
-    double getThrottle();
+    double getCurrentSpeed() const;
+    double getThrottle() const;
     void setThrottle(double);
-    double getDistance();
+    double getDistance() const;
     void update(double dt);
-    bool getEngineStatus();
+    bool getEngineStatus() const;
     void setEngineStatus(bool s);
-    bool getBrakeStatus();
+    bool getBrakeStatus() const;
     void setBrakeStatus(bool);
 
 

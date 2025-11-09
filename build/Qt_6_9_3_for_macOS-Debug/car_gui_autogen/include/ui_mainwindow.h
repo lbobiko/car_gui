@@ -35,6 +35,8 @@ public:
     QLabel *throttleInfo;
     QLabel *throttleDetail;
     QLabel *brakeInfo;
+    QPushButton *quitButton;
+    QPushButton *helpButton;
     QMenuBar *menubar;
     QStatusBar *statusbar;
 
@@ -78,6 +80,12 @@ public:
         brakeInfo = new QLabel(centralwidget);
         brakeInfo->setObjectName("brakeInfo");
         brakeInfo->setGeometry(QRect(410, 410, 151, 41));
+        quitButton = new QPushButton(centralwidget);
+        quitButton->setObjectName("quitButton");
+        quitButton->setGeometry(QRect(640, 10, 150, 41));
+        helpButton = new QPushButton(centralwidget);
+        helpButton->setObjectName("helpButton");
+        helpButton->setGeometry(QRect(640, 60, 151, 41));
         MainWindow->setCentralWidget(centralwidget);
         menubar = new QMenuBar(MainWindow);
         menubar->setObjectName("menubar");
@@ -106,6 +114,8 @@ public:
         throttleInfo->setText(QString());
         throttleDetail->setText(QCoreApplication::translate("MainWindow", "0", nullptr));
         brakeInfo->setText(QString());
+        quitButton->setText(QCoreApplication::translate("MainWindow", "Quit program", nullptr));
+        helpButton->setText(QCoreApplication::translate("MainWindow", "Help", nullptr));
     } // retranslateUi
 
 };

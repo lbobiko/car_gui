@@ -4,7 +4,7 @@ Engine::Engine() {
     this->engineStatus = false;
 }
 
-bool Engine::getEngineStatus(){
+bool Engine::getEngineStatus() const{
     return engineStatus;
 }
 

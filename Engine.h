@@ -8,7 +8,7 @@ private:
 
 public:
     Engine();
-    bool getEngineStatus();
+    bool getEngineStatus() const;
     void setEngineStatus(bool);
 
 };

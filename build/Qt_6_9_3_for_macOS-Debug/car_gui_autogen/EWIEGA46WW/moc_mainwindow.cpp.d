@@ -725,6 +725,12 @@
   /Applications/Xcode.app/Contents/Developer/Toolchains/XcodeDefault.xctoolchain/usr/lib/clang/17/include/limits.h \
   /Applications/Xcode.app/Contents/Developer/Toolchains/XcodeDefault.xctoolchain/usr/lib/clang/17/include/ptrcheck.h \
   /Applications/Xcode.app/Contents/Developer/Toolchains/XcodeDefault.xctoolchain/usr/lib/clang/17/include/stdarg.h \
+  /Users/lukebobinski/Qt/6.9.3/macos/lib/QtCore.framework/Versions/A/Headers/QList \
+  /Users/lukebobinski/Qt/6.9.3/macos/lib/QtCore.framework/Versions/A/Headers/QObject \
+  /Users/lukebobinski/Qt/6.9.3/macos/lib/QtCore.framework/Versions/A/Headers/QRect \
+  /Users/lukebobinski/Qt/6.9.3/macos/lib/QtCore.framework/Versions/A/Headers/QSize \
+  /Users/lukebobinski/Qt/6.9.3/macos/lib/QtCore.framework/Versions/A/Headers/QSizeF \
+  /Users/lukebobinski/Qt/6.9.3/macos/lib/QtCore.framework/Versions/A/Headers/QString \
   /Users/lukebobinski/Qt/6.9.3/macos/lib/QtCore.framework/Versions/A/Headers/QTimer \
   /Users/lukebobinski/Qt/6.9.3/macos/lib/QtCore.framework/Versions/A/Headers/q17memory.h \
   /Users/lukebobinski/Qt/6.9.3/macos/lib/QtCore.framework/Versions/A/Headers/q20functional.h \
@@ -760,6 +766,9 @@
   /Users/lukebobinski/Qt/6.9.3/macos/lib/QtCore.framework/Versions/A/Headers/qcontainerinfo.h \
   /Users/lukebobinski/Qt/6.9.3/macos/lib/QtCore.framework/Versions/A/Headers/qcontainertools_impl.h \
   /Users/lukebobinski/Qt/6.9.3/macos/lib/QtCore.framework/Versions/A/Headers/qcontiguouscache.h \
+  /Users/lukebobinski/Qt/6.9.3/macos/lib/QtCore.framework/Versions/A/Headers/qcoreapplication.h \
+  /Users/lukebobinski/Qt/6.9.3/macos/lib/QtCore.framework/Versions/A/Headers/qcoreapplication_platform.h \
+  /Users/lukebobinski/Qt/6.9.3/macos/lib/QtCore.framework/Versions/A/Headers/qcoreevent.h \
   /Users/lukebobinski/Qt/6.9.3/macos/lib/QtCore.framework/Versions/A/Headers/qdarwinhelpers.h \
   /Users/lukebobinski/Qt/6.9.3/macos/lib/QtCore.framework/Versions/A/Headers/qdatastream.h \
   /Users/lukebobinski/Qt/6.9.3/macos/lib/QtCore.framework/Versions/A/Headers/qdeadlinetimer.h \
@@ -785,6 +794,7 @@
   /Users/lukebobinski/Qt/6.9.3/macos/lib/QtCore.framework/Versions/A/Headers/qlatin1stringview.h \
   /Users/lukebobinski/Qt/6.9.3/macos/lib/QtCore.framework/Versions/A/Headers/qline.h \
   /Users/lukebobinski/Qt/6.9.3/macos/lib/QtCore.framework/Versions/A/Headers/qlist.h \
+  /Users/lukebobinski/Qt/6.9.3/macos/lib/QtCore.framework/Versions/A/Headers/qlocale.h \
   /Users/lukebobinski/Qt/6.9.3/macos/lib/QtCore.framework/Versions/A/Headers/qlogging.h \
   /Users/lukebobinski/Qt/6.9.3/macos/lib/QtCore.framework/Versions/A/Headers/qmalloc.h \
   /Users/lukebobinski/Qt/6.9.3/macos/lib/QtCore.framework/Versions/A/Headers/qmap.h \
@@ -794,6 +804,7 @@
   /Users/lukebobinski/Qt/6.9.3/macos/lib/QtCore.framework/Versions/A/Headers/qmetatype.h \
   /Users/lukebobinski/Qt/6.9.3/macos/lib/QtCore.framework/Versions/A/Headers/qminmax.h \
   /Users/lukebobinski/Qt/6.9.3/macos/lib/QtCore.framework/Versions/A/Headers/qnamespace.h \
+  /Users/lukebobinski/Qt/6.9.3/macos/lib/QtCore.framework/Versions/A/Headers/qnativeinterface.h \
   /Users/lukebobinski/Qt/6.9.3/macos/lib/QtCore.framework/Versions/A/Headers/qnumeric.h \
   /Users/lukebobinski/Qt/6.9.3/macos/lib/QtCore.framework/Versions/A/Headers/qobject.h \
   /Users/lukebobinski/Qt/6.9.3/macos/lib/QtCore.framework/Versions/A/Headers/qobject_impl.h \
@@ -859,35 +870,51 @@
   /Users/lukebobinski/Qt/6.9.3/macos/lib/QtCore.framework/Versions/A/Headers/qversiontagging.h \
   /Users/lukebobinski/Qt/6.9.3/macos/lib/QtCore.framework/Versions/A/Headers/qxptype_traits.h \
   /Users/lukebobinski/Qt/6.9.3/macos/lib/QtCore.framework/Versions/A/Headers/qyieldcpu.h \
+  /Users/lukebobinski/Qt/6.9.3/macos/lib/QtGui.framework/Versions/A/Headers/QKeyEvent \
+  /Users/lukebobinski/Qt/6.9.3/macos/lib/QtGui.framework/Versions/A/Headers/QShortcut \
+  /Users/lukebobinski/Qt/6.9.3/macos/lib/QtGui.framework/Versions/A/Headers/QTransform \
   /Users/lukebobinski/Qt/6.9.3/macos/lib/QtGui.framework/Versions/A/Headers/qaction.h \
   /Users/lukebobinski/Qt/6.9.3/macos/lib/QtGui.framework/Versions/A/Headers/qbitmap.h \
   /Users/lukebobinski/Qt/6.9.3/macos/lib/QtGui.framework/Versions/A/Headers/qbrush.h \
   /Users/lukebobinski/Qt/6.9.3/macos/lib/QtGui.framework/Versions/A/Headers/qcolor.h \
   /Users/lukebobinski/Qt/6.9.3/macos/lib/QtGui.framework/Versions/A/Headers/qcursor.h \
+  /Users/lukebobinski/Qt/6.9.3/macos/lib/QtGui.framework/Versions/A/Headers/qevent.h \
+  /Users/lukebobinski/Qt/6.9.3/macos/lib/QtGui.framework/Versions/A/Headers/qeventpoint.h \
   /Users/lukebobinski/Qt/6.9.3/macos/lib/QtGui.framework/Versions/A/Headers/qfont.h \
   /Users/lukebobinski/Qt/6.9.3/macos/lib/QtGui.framework/Versions/A/Headers/qfontinfo.h \
   /Users/lukebobinski/Qt/6.9.3/macos/lib/QtGui.framework/Versions/A/Headers/qfontmetrics.h \
   /Users/lukebobinski/Qt/6.9.3/macos/lib/QtGui.framework/Versions/A/Headers/qfontvariableaxis.h \
+  /Users/lukebobinski/Qt/6.9.3/macos/lib/QtGui.framework/Versions/A/Headers/qguiapplication.h \
+  /Users/lukebobinski/Qt/6.9.3/macos/lib/QtGui.framework/Versions/A/Headers/qguiapplication_platform.h \
   /Users/lukebobinski/Qt/6.9.3/macos/lib/QtGui.framework/Versions/A/Headers/qicon.h \
   /Users/lukebobinski/Qt/6.9.3/macos/lib/QtGui.framework/Versions/A/Headers/qimage.h \
+  /Users/lukebobinski/Qt/6.9.3/macos/lib/QtGui.framework/Versions/A/Headers/qinputdevice.h \
+  /Users/lukebobinski/Qt/6.9.3/macos/lib/QtGui.framework/Versions/A/Headers/qinputmethod.h \
   /Users/lukebobinski/Qt/6.9.3/macos/lib/QtGui.framework/Versions/A/Headers/qkeysequence.h \
   /Users/lukebobinski/Qt/6.9.3/macos/lib/QtGui.framework/Versions/A/Headers/qpaintdevice.h \
   /Users/lukebobinski/Qt/6.9.3/macos/lib/QtGui.framework/Versions/A/Headers/qpalette.h \
   /Users/lukebobinski/Qt/6.9.3/macos/lib/QtGui.framework/Versions/A/Headers/qpicture.h \
   /Users/lukebobinski/Qt/6.9.3/macos/lib/QtGui.framework/Versions/A/Headers/qpixelformat.h \
   /Users/lukebobinski/Qt/6.9.3/macos/lib/QtGui.framework/Versions/A/Headers/qpixmap.h \
+  /Users/lukebobinski/Qt/6.9.3/macos/lib/QtGui.framework/Versions/A/Headers/qpointingdevice.h \
   /Users/lukebobinski/Qt/6.9.3/macos/lib/QtGui.framework/Versions/A/Headers/qpolygon.h \
   /Users/lukebobinski/Qt/6.9.3/macos/lib/QtGui.framework/Versions/A/Headers/qregion.h \
   /Users/lukebobinski/Qt/6.9.3/macos/lib/QtGui.framework/Versions/A/Headers/qrgb.h \
   /Users/lukebobinski/Qt/6.9.3/macos/lib/QtGui.framework/Versions/A/Headers/qrgba64.h \
+  /Users/lukebobinski/Qt/6.9.3/macos/lib/QtGui.framework/Versions/A/Headers/qscreen.h \
+  /Users/lukebobinski/Qt/6.9.3/macos/lib/QtGui.framework/Versions/A/Headers/qscreen_platform.h \
+  /Users/lukebobinski/Qt/6.9.3/macos/lib/QtGui.framework/Versions/A/Headers/qshortcut.h \
   /Users/lukebobinski/Qt/6.9.3/macos/lib/QtGui.framework/Versions/A/Headers/qtextdocument.h \
   /Users/lukebobinski/Qt/6.9.3/macos/lib/QtGui.framework/Versions/A/Headers/qtgui-config.h \
   /Users/lukebobinski/Qt/6.9.3/macos/lib/QtGui.framework/Versions/A/Headers/qtguiexports.h \
   /Users/lukebobinski/Qt/6.9.3/macos/lib/QtGui.framework/Versions/A/Headers/qtguiglobal.h \
   /Users/lukebobinski/Qt/6.9.3/macos/lib/QtGui.framework/Versions/A/Headers/qtransform.h \
+  /Users/lukebobinski/Qt/6.9.3/macos/lib/QtGui.framework/Versions/A/Headers/qvector2d.h \
+  /Users/lukebobinski/Qt/6.9.3/macos/lib/QtGui.framework/Versions/A/Headers/qvectornd.h \
   /Users/lukebobinski/Qt/6.9.3/macos/lib/QtGui.framework/Versions/A/Headers/qwindowdefs.h \
   /Users/lukebobinski/Qt/6.9.3/macos/lib/QtWidgets.framework/Versions/A/Headers/QLabel \
   /Users/lukebobinski/Qt/6.9.3/macos/lib/QtWidgets.framework/Versions/A/Headers/QMainWindow \
+  /Users/lukebobinski/Qt/6.9.3/macos/lib/QtWidgets.framework/Versions/A/Headers/QWidget \
   /Users/lukebobinski/Qt/6.9.3/macos/lib/QtWidgets.framework/Versions/A/Headers/qframe.h \
   /Users/lukebobinski/Qt/6.9.3/macos/lib/QtWidgets.framework/Versions/A/Headers/qlabel.h \
   /Users/lukebobinski/Qt/6.9.3/macos/lib/QtWidgets.framework/Versions/A/Headers/qmainwindow.h \
@@ -899,4 +926,5 @@
   /Users/lukebobinski/Qt/6.9.3/macos/lib/QtWidgets.framework/Versions/A/Headers/qwidget.h \
   /Users/lukebobinski/qtrepos/car_gui/Brake.h \
   /Users/lukebobinski/qtrepos/car_gui/Car.h \
+  /Users/lukebobinski/qtrepos/car_gui/Dashboard.h \
   /Users/lukebobinski/qtrepos/car_gui/Engine.h

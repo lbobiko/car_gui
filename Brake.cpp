@@ -5,7 +5,7 @@ Brake::Brake(){
 
 }
 
-bool Brake::getBrakePressed(){
+bool Brake::getBrakePressed() const {
     return brakePressed;
 }
 
