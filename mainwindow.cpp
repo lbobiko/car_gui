@@ -10,6 +10,7 @@
 #include <QDialog>
 #include <QLabel>
 #include "Dashboard.h"
+#include <QVBoxLayout>
 
 MainWindow::MainWindow(QWidget *parent)
     : QMainWindow(parent)
@@ -52,32 +53,26 @@ MainWindow::MainWindow(QWidget *parent)
     keyQuit->setContext(Qt::ApplicationShortcut);
     connect(keyQuit, &QShortcut::activated, this, &MainWindow::quitButtonClicked);
 
-    ui->engineInfo->setText("Engine OFF");
-    ui->engineInfo->setStyleSheet("color: red; font-weight: bold;");
-    ui->throttleInfo->setText("Throttle");
-    ui->throttleInfo->setStyleSheet("color: red; font-weight: bold;");
-    ui->brakeInfo->setText("Brake OFF");
-    ui->brakeInfo->setStyleSheet("color: red; font-weight: bold;");
     connect(ui->helpButton, &QPushButton::clicked, this, &MainWindow::showHelpDialog);
-    //refreshUI();
 
     // startButton to objectName przycisku w .ui
     connect(ui->engineButton, &QPushButton::clicked, this, &MainWindow::engineButtonClicked);
     connect(ui->throttleButton, &QPushButton::clicked, this, &MainWindow::throttleButtonClicked);
-    //connect(ui->brakeButton, &QPushButton::clicked, this, &MainWindow::brakeButtonClicked);
+
+    // hamulec
     connect(ui->brakeButton, &QPushButton::pressed,  this, [this]{
         car.setBrakeStatus(true);
     });
-
     connect(ui->brakeButton, &QPushButton::released, this, [this]{
         car.setBrakeStatus(false);
     });
+
     connect(ui->quitButton, &QPushButton::clicked, this, &MainWindow::quitButtonClicked);
 
     timer = new QTimer(this);
     connect(timer, &QTimer::timeout, this, &MainWindow::updateSimulation,
             Qt::UniqueConnection);
-    timer->start(DT * 1000); // czyli co 20 ms
+    timer->start(DT * 1000); // co 20 ms
 }
 
 
@@ -87,7 +82,8 @@ MainWindow::~MainWindow()
 }
 
 void MainWindow::keyPressEvent(QKeyEvent *e) {
-    if (e->isAutoRepeat()) { QMainWindow::keyPressEvent(e);
+    if (e->isAutoRepeat()) {
+        QMainWindow::keyPressEvent(e);
         return;
     }
 
@@ -101,7 +97,8 @@ void MainWindow::keyPressEvent(QKeyEvent *e) {
 }
 
 void MainWindow::keyReleaseEvent(QKeyEvent *e) {
-    if (e->isAutoRepeat()) { QMainWindow::keyReleaseEvent(e);
+    if (e->isAutoRepeat()) {
+        QMainWindow::keyReleaseEvent(e);
         return;
     }
 
@@ -126,6 +123,32 @@ void MainWindow::updateSimulation()
     car.update(DT);
     dashboard->refresh(car);
 
+    /*
+    // do testów drogi hamowania:
+    double v = car.getCurrentSpeed();
+    bool brake = car.getBrakeStatus();
+    double d = car.getDistance();
+
+    // Początek hamowania
+    if (brake && !brakingTestActive && v > 0.1) {
+        brakingTestActive = true;
+        brakeStartDist = d;
+        vStart = v;
+    }
+
+    // Zatrzymanie
+    if (brakingTestActive && v <= 0.01) {
+        double stopDist = (d - brakeStartDist);
+        brakingTestActive = false;
+
+        QMessageBox::information(
+            this,
+            "Test hamowania",
+            QString("Zatrzymanie z %1 km/h zajęło %2 m.")
+                .arg(vStart, 0, 'f', 1)
+                .arg(stopDist, 0, 'f', 1)
+            );
+    }*/
 }
 
 void MainWindow::engineButtonClicked() {
@@ -182,11 +205,6 @@ void MainWindow::quitButtonClicked(){
         );
     QApplication::quit();
 }
-
-#include <QDialog>
-#include <QLabel>
-#include <QVBoxLayout>
-#include <QPushButton>
 
 void MainWindow::showHelpDialog()
 {

@@ -8,11 +8,11 @@ class Car
 {
 private:
     std::string name;
-    double currentSpeed;
     double throttle;
     Brake brake;
     Engine engine;
-    double distance = 0.0;
+    double v_mps = 0.0;    // predkosc w metrach/s
+    double x_m = 0.0;      // pozycja
 
 
 

@@ -44,6 +44,10 @@ private:
     QTimer *timer;
     //int counter = 0;
     Dashboard* dashboard = nullptr;
+    // do testów hamulca:
+    //bool brakingTestActive = false;
+    //double brakeStartDist = 0.0;
+    //double vStart = 0.0;
 
 
 };

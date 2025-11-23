@@ -15,8 +15,9 @@ Dashboard::Dashboard(QLabel* engineInfo,
     distanceInfo_(distanceInfo)
 {
     // opcjonalne startowe wartości/formaty
-    if (speedInfo_) speedInfo_->setStyleSheet(
-            "font-size:28px; font-weight:bold; font-family:'Courier New';");
+    if (speedInfo_) {
+        speedInfo_->setStyleSheet("font-size:28px; font-weight:bold; font-family:'Courier New';");
+    }
 }
 
 void Dashboard::setStatus(QLabel* lbl, const QString& text, const QString& color) {
@@ -28,32 +29,57 @@ void Dashboard::setStatus(QLabel* lbl, const QString& text, const QString& color
 void Dashboard::refresh(const Car& car) {
     // Engine
     const bool eng = car.getEngineStatus();
-    setStatus(engineInfo_, eng ? "Engine ON" : "Engine OFF", eng ? "green" : "red");
+    if (eng) {
+        setStatus(engineInfo_, "Engine ON", "green");
+    } else {
+        setStatus(engineInfo_, "Engine OFF", "red");
+    }
 
     // Throttle
     const double t = car.getThrottle();
-    setStatus(throttleInfo_, "Throttle", t > 0.0 ? "green" : "red");
+    if (t > 0.0) {
+        setStatus(throttleInfo_, "Throttle", "green");
+    } else {
+        setStatus(throttleInfo_, "Throttle", "red");
+    }
+
     if (throttleDet_) {
-        throttleDet_->setText(QString::number(t * 100.0, 'f', 0) + "%");
-        throttleDet_->setStyleSheet(
-            QString("color:%1; font-weight:bold;").arg(t > 0.0 ? "green" : "red"));
+        const QString pct = QString::number(t * 100.0, 'f', 0) + "%";
+        throttleDet_->setText(pct);
+        if (t > 0.0) {
+            throttleDet_->setStyleSheet("color: green; font-weight: bold;");
+        } else {
+            throttleDet_->setStyleSheet("color: red; font-weight: bold;");
+        }
     }
 
     // Brake
     const bool br = car.getBrakeStatus();
-    setStatus(brakeInfo_, br ? "Brake ON" : "Brake OFF", br ? "red" : "green");
+    if (br) {
+        setStatus(brakeInfo_, "Brake ON", "red");
+    } else {
+        setStatus(brakeInfo_, "Brake OFF", "green");
+    }
 
-    // Speed (kolor w zależności od zakresu)
-    const double v = car.getCurrentSpeed();
+    // Speed - kolor
     if (speedInfo_) {
-        const QString vColor = (v < 100.0) ? "green" : (v < 150.0) ? "orange" : "red";
+        const double v = car.getCurrentSpeed(); // km/h
+        QString color;
+        if (v < 100.0) {
+            color = "green";
+        } else if (v < 150.0) {
+            color = "orange";
+        } else {
+            color = "red";
+        }
+
         speedInfo_->setStyleSheet(
-            QString("color:%1; font-size:28px; font-weight:bold; font-family:'Courier New';")
-                .arg(vColor));
+            "color: " + color + "; font-size:28px; font-weight:bold; font-family:'Courier New';"
+            );
         speedInfo_->setText(QString::number(v, 'f', 2));
     }
 
-    // Distance
+    // Distance metry -> km
     if (distanceInfo_) {
         const double dKm = car.getDistance() / 1000.0;
         distanceInfo_->setText(QString::number(dKm, 'f', 2) + " km");
