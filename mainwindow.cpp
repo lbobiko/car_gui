@@ -28,7 +28,11 @@ MainWindow::MainWindow(QWidget *parent)
         ui->brakeInfo,
         ui->speedInfo,
         ui->distanceInfo,
-        ui->fuelInfo
+        ui->fuelInfo,
+        ui->tripDistanceInfo,
+        ui->tripAvgConsInfo,
+        ui->tripTimeInfo,
+        ui->tripAvgSpeedInfo
         );
 
     // pierwsze odświeżenie, żeby UI nie było puste
@@ -82,6 +86,13 @@ MainWindow::MainWindow(QWidget *parent)
     });
 
     connect(ui->quitButton, &QPushButton::clicked, this, &MainWindow::quitButtonClicked);
+
+    // Reset button
+    connect(ui->resetTripButton, &QPushButton::clicked,
+            this, [this]{
+                car.resetTrip();
+                dashboard->refresh(car);
+            });
 
     timer = new QTimer(this);
     connect(timer, &QTimer::timeout, this, &MainWindow::updateSimulation,

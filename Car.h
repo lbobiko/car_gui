@@ -7,6 +7,7 @@
 #include "FuelTank.h"
 #include "ConsumptionModel.h"
 #include "Constants.h"
+#include "TripComputer.h"
 
 class Car {
 private:
@@ -23,6 +24,8 @@ private:
     double   fuelUsedTotal_ = 0.0;
 
     ConsumptionModel* consumption_ = nullptr;   // ← tylko wskaźnik
+
+    TripComputer tripComputer_;
 
 public:
     Car();
@@ -49,6 +52,14 @@ public:
 
     // zmiana strategii spalania
     void setConsumptionModel(ConsumptionModel* model);
+
+    // statystyki z TripComputer
+    double getTripDistanceKm() const;
+    double getTripAvgConsumption() const;
+    double getTripTimeMinutes() const;
+    double getTripAvgSpeedKmh() const;
+
+    void resetTrip();
 };
 
 #endif

@@ -1182,6 +1182,8 @@ car_gui_autogen/timestamp: \
 	/Users/lukebobinski/qtrepos/car_gui/FuelTank.h \
 	/Users/lukebobinski/qtrepos/car_gui/Transmission.cpp \
 	/Users/lukebobinski/qtrepos/car_gui/Transmission.h \
+	/Users/lukebobinski/qtrepos/car_gui/TripComputer.cpp \
+	/Users/lukebobinski/qtrepos/car_gui/TripComputer.h \
 	/Users/lukebobinski/qtrepos/car_gui/build/Qt_6_9_3_for_macOS-Debug/.qtc/package-manager/auto-setup.cmake \
 	/Users/lukebobinski/qtrepos/car_gui/build/Qt_6_9_3_for_macOS-Debug/.qtc/package-manager/maintenance_tool_provider.cmake \
 	/Users/lukebobinski/qtrepos/car_gui/build/Qt_6_9_3_for_macOS-Debug/CMakeFiles/3.30.5/CMakeCXXCompiler.cmake \

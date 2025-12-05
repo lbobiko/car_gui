@@ -15,7 +15,11 @@ public:
               QLabel* brakeInfo,
               QLabel* speedInfo,
               QLabel* distanceInfo,
-              QLabel* fuelInfo);
+              QLabel* fuelInfo,
+              QLabel* tripDistanceInfo,
+              QLabel* tripAvgConsInfo,
+              QLabel* tripTimeInfo,
+              QLabel* tripAvgSpeedInfo);
 
     void refresh(const Car& car);
 
@@ -27,6 +31,11 @@ private:
     QLabel* speedInfo_     = nullptr;
     QLabel* distanceInfo_  = nullptr;
     QLabel* fuelInfo_      = nullptr;
+
+    QLabel* tripDistanceInfo_ = nullptr;
+    QLabel* tripAvgConsInfo_  = nullptr;
+    QLabel* tripTimeInfo_     = nullptr;
+    QLabel* tripAvgSpeedInfo_ = nullptr;
 
     void setStatus(QLabel* lbl, const QString& text, const QString& color);
 };

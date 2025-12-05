@@ -7,14 +7,22 @@ Dashboard::Dashboard(QLabel* engineInfo,
                      QLabel* brakeInfo,
                      QLabel* speedInfo,
                      QLabel* distanceInfo,
-                     QLabel* fuelInfo)
+                     QLabel* fuelInfo,
+                     QLabel* tripDistanceInfo,
+                     QLabel* tripAvgConsInfo,
+                     QLabel* tripTimeInfo,
+                     QLabel* tripAvgSpeedInfo)
     : engineInfo_(engineInfo),
     throttleInfo_(throttleInfo),
     throttleDet_(throttleDetail),
     brakeInfo_(brakeInfo),
     speedInfo_(speedInfo),
     distanceInfo_(distanceInfo),
-    fuelInfo_(fuelInfo)
+    fuelInfo_(fuelInfo),
+    tripDistanceInfo_(tripDistanceInfo),
+    tripAvgConsInfo_(tripAvgConsInfo),
+    tripTimeInfo_(tripTimeInfo),
+    tripAvgSpeedInfo_(tripAvgSpeedInfo)
 {
     // opcjonalne startowe wartości/formaty
     if (speedInfo_) {
@@ -108,5 +116,33 @@ void Dashboard::refresh(const Car& car) {
         fuelInfo_->setStyleSheet(
             QString("color:%1; font-weight:bold;").arg(color));
         fuelInfo_->setText(text);
+    }
+    // ---------- TripComputer ----------
+    if (tripDistanceInfo_) {
+        double dKm = car.getTripDistanceKm();
+        tripDistanceInfo_->setText(QString::number(dKm, 'f', 2) + " km");
+    }
+
+    if (tripAvgConsInfo_) {
+        double avgL100 = car.getTripAvgConsumption();
+        tripAvgConsInfo_->setText(QString::number(avgL100, 'f', 1) + " L/100km");
+    }
+
+    if (tripTimeInfo_) {
+        double minutes = car.getTripTimeMinutes();
+        tripTimeInfo_->setText(QString::number(minutes, 'f', 1) + " min");
+    }
+
+    if (tripAvgSpeedInfo_) {
+        double vAvg = car.getTripAvgSpeedKmh();
+        tripAvgSpeedInfo_->setText(QString::number(vAvg, 'f', 1) + " km/h");
+    }
+    if (tripTimeInfo_) {
+        double minutes = car.getTripTimeMinutes();
+        if (minutes <= 0.001) {
+            tripTimeInfo_->setText("--");
+        } else {
+            tripTimeInfo_->setText(QString::number(minutes, 'f', 1) + " min");
+        }
     }
 }
