@@ -1,35 +1,54 @@
 #ifndef CAR_H
 #define CAR_H
+
+#include <string>
 #include "Brake.h"
 #include "Engine.h"
-#include <string>
+#include "FuelTank.h"
+#include "ConsumptionModel.h"
+#include "Constants.h"
 
-class Car
-{
+class Car {
 private:
     std::string name;
-    double throttle;
-    Brake brake;
+    double throttle = 0.0;
+
+    Brake  brake;
     Engine engine;
-    double v_mps = 0.0;    // predkosc w metrach/s
-    double x_m = 0.0;      // pozycja
 
+    double v_mps = 0.0;   // prędkość w m/s
+    double x_m   = 0.0;   // pozycja w m
 
+    FuelTank fuelTank_;
+    double   fuelUsedTotal_ = 0.0;
+
+    ConsumptionModel* consumption_ = nullptr;   // ← tylko wskaźnik
 
 public:
     Car();
-    std::string getName();
+
+    std::string getName() const;
     double getCurrentSpeed() const;
     double getThrottle() const;
-    void setThrottle(double);
     double getDistance() const;
-    void update(double dt);
+
+    void   update(double dt);
+
     bool getEngineStatus() const;
     void setEngineStatus(bool s);
+
     bool getBrakeStatus() const;
-    void setBrakeStatus(bool);
+    void setBrakeStatus(bool b);
 
+    double getFuelLevel() const;
+    double getFuelCapacity() const;
+    double getFuelUsedTotal() const;
+    void   refuel(double liters);
 
+    void   setThrottle(double t);
+
+    // zmiana strategii spalania
+    void setConsumptionModel(ConsumptionModel* model);
 };
 
-#endif // CAR_H
+#endif

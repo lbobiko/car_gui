@@ -121,6 +121,22 @@ build CMakeFiles/car_gui.dir/Dashboard.cpp.o: CXX_COMPILER__car_gui_unscanned_De
   OBJECT_DIR = CMakeFiles/car_gui.dir
   OBJECT_FILE_DIR = CMakeFiles/car_gui.dir
 
+build CMakeFiles/car_gui.dir/ConsumptionModel.cpp.o: CXX_COMPILER__car_gui_unscanned_Debug /Users/lukebobinski/qtrepos/car_gui/ConsumptionModel.cpp || cmake_object_order_depends_target_car_gui
+  DEFINES = -DQT_CORE_LIB -DQT_GUI_LIB -DQT_WIDGETS_LIB
+  DEP_FILE = CMakeFiles/car_gui.dir/ConsumptionModel.cpp.o.d
+  FLAGS = -DQT_QML_DEBUG -g -std=gnu++17 -arch arm64 -isysroot /Applications/Xcode.app/Contents/Developer/Platforms/MacOSX.platform/Developer/SDKs/MacOSX26.1.sdk -mmacosx-version-min=26.0 -fcolor-diagnostics
+  INCLUDES = -I/Users/lukebobinski/qtrepos/car_gui/build/Qt_6_9_3_for_macOS-Debug/car_gui_autogen/include -isystem /Users/lukebobinski/Qt/6.9.3/macos/lib/QtCore.framework/Headers -iframework /Users/lukebobinski/Qt/6.9.3/macos/lib -isystem /Users/lukebobinski/Qt/6.9.3/macos/mkspecs/macx-clang -isystem /Users/lukebobinski/Qt/6.9.3/macos/include -isystem /Users/lukebobinski/Qt/6.9.3/macos/lib/QtWidgets.framework/Headers -isystem /Users/lukebobinski/Qt/6.9.3/macos/lib/QtGui.framework/Headers
+  OBJECT_DIR = CMakeFiles/car_gui.dir
+  OBJECT_FILE_DIR = CMakeFiles/car_gui.dir
+
+build CMakeFiles/car_gui.dir/TripComputer.cpp.o: CXX_COMPILER__car_gui_unscanned_Debug /Users/lukebobinski/qtrepos/car_gui/TripComputer.cpp || cmake_object_order_depends_target_car_gui
+  DEFINES = -DQT_CORE_LIB -DQT_GUI_LIB -DQT_WIDGETS_LIB
+  DEP_FILE = CMakeFiles/car_gui.dir/TripComputer.cpp.o.d
+  FLAGS = -DQT_QML_DEBUG -g -std=gnu++17 -arch arm64 -isysroot /Applications/Xcode.app/Contents/Developer/Platforms/MacOSX.platform/Developer/SDKs/MacOSX26.1.sdk -mmacosx-version-min=26.0 -fcolor-diagnostics
+  INCLUDES = -I/Users/lukebobinski/qtrepos/car_gui/build/Qt_6_9_3_for_macOS-Debug/car_gui_autogen/include -isystem /Users/lukebobinski/Qt/6.9.3/macos/lib/QtCore.framework/Headers -iframework /Users/lukebobinski/Qt/6.9.3/macos/lib -isystem /Users/lukebobinski/Qt/6.9.3/macos/mkspecs/macx-clang -isystem /Users/lukebobinski/Qt/6.9.3/macos/include -isystem /Users/lukebobinski/Qt/6.9.3/macos/lib/QtWidgets.framework/Headers -isystem /Users/lukebobinski/Qt/6.9.3/macos/lib/QtGui.framework/Headers
+  OBJECT_DIR = CMakeFiles/car_gui.dir
+  OBJECT_FILE_DIR = CMakeFiles/car_gui.dir
+
 
 # =============================================================================
 # Link build statements for EXECUTABLE target car_gui
@@ -129,7 +145,7 @@ build CMakeFiles/car_gui.dir/Dashboard.cpp.o: CXX_COMPILER__car_gui_unscanned_De
 #############################################
 # Link the executable car_gui.app/Contents/MacOS/car_gui
 
-build car_gui.app/Contents/MacOS/car_gui: CXX_EXECUTABLE_LINKER__car_gui_Debug CMakeFiles/car_gui.dir/car_gui_autogen/mocs_compilation.cpp.o CMakeFiles/car_gui.dir/main.cpp.o CMakeFiles/car_gui.dir/mainwindow.cpp.o CMakeFiles/car_gui.dir/Car.cpp.o CMakeFiles/car_gui.dir/Engine.cpp.o CMakeFiles/car_gui.dir/Brake.cpp.o CMakeFiles/car_gui.dir/FuelTank.cpp.o CMakeFiles/car_gui.dir/Transmission.cpp.o CMakeFiles/car_gui.dir/Dashboard.cpp.o | /Users/lukebobinski/Qt/6.9.3/macos/lib/QtWidgets.framework/Versions/A/QtWidgets /Users/lukebobinski/Qt/6.9.3/macos/lib/QtGui.framework/Versions/A/QtGui /Users/lukebobinski/Qt/6.9.3/macos/lib/QtCore.framework/Versions/A/QtCore || car_gui_autogen car_gui_autogen_timestamp_deps
+build car_gui.app/Contents/MacOS/car_gui: CXX_EXECUTABLE_LINKER__car_gui_Debug CMakeFiles/car_gui.dir/car_gui_autogen/mocs_compilation.cpp.o CMakeFiles/car_gui.dir/main.cpp.o CMakeFiles/car_gui.dir/mainwindow.cpp.o CMakeFiles/car_gui.dir/Car.cpp.o CMakeFiles/car_gui.dir/Engine.cpp.o CMakeFiles/car_gui.dir/Brake.cpp.o CMakeFiles/car_gui.dir/FuelTank.cpp.o CMakeFiles/car_gui.dir/Transmission.cpp.o CMakeFiles/car_gui.dir/Dashboard.cpp.o CMakeFiles/car_gui.dir/ConsumptionModel.cpp.o CMakeFiles/car_gui.dir/TripComputer.cpp.o | /Users/lukebobinski/Qt/6.9.3/macos/lib/QtWidgets.framework/Versions/A/QtWidgets /Users/lukebobinski/Qt/6.9.3/macos/lib/QtGui.framework/Versions/A/QtGui /Users/lukebobinski/Qt/6.9.3/macos/lib/QtCore.framework/Versions/A/QtCore || car_gui_autogen car_gui_autogen_timestamp_deps
   FLAGS = -DQT_QML_DEBUG -g -arch arm64 -isysroot /Applications/Xcode.app/Contents/Developer/Platforms/MacOSX.platform/Developer/SDKs/MacOSX26.1.sdk -mmacosx-version-min=26.0
   LINK_LIBRARIES = -Wl,-rpath,/Users/lukebobinski/Qt/6.9.3/macos/lib  /Users/lukebobinski/Qt/6.9.3/macos/lib/QtWidgets.framework/Versions/A/QtWidgets  /Users/lukebobinski/Qt/6.9.3/macos/lib/QtGui.framework/Versions/A/QtGui  -framework AppKit  -framework OpenGL  -framework ImageIO  -framework Metal  /Users/lukebobinski/Qt/6.9.3/macos/lib/QtCore.framework/Versions/A/QtCore  -framework IOKit  -framework DiskArbitration  -framework UniformTypeIdentifiers
   LINK_PATH = -F/Users/lukebobinski/Qt/6.9.3/macos/lib

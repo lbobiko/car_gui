@@ -11,6 +11,7 @@
 #include <QLabel>
 #include "Dashboard.h"
 #include <QVBoxLayout>
+#include "ConsumptionModel.h"
 
 MainWindow::MainWindow(QWidget *parent)
     : QMainWindow(parent)
@@ -18,13 +19,16 @@ MainWindow::MainWindow(QWidget *parent)
 {
     ui->setupUi(this);
 
+    car.setConsumptionModel(&normalModel_);
+
     dashboard = new Dashboard(
         ui->engineInfo,
         ui->throttleInfo,
         ui->throttleDetail,
         ui->brakeInfo,
         ui->speedInfo,
-        ui->distanceInfo
+        ui->distanceInfo,
+        ui->fuelInfo
         );
 
     // pierwsze odświeżenie, żeby UI nie było puste
@@ -32,6 +36,16 @@ MainWindow::MainWindow(QWidget *parent)
 
     // żeby okno łapało klawisze
     this->setFocusPolicy(Qt::StrongFocus);
+
+    // przycisk Refuel
+    connect(ui->refuelButton, &QPushButton::clicked,
+            this, &MainWindow::refuelButtonClicked);
+
+    // skrót klawiaturowy R
+    auto keyRefuel = new QShortcut(QKeySequence(Qt::Key_R), this);
+    keyRefuel->setContext(Qt::ApplicationShortcut);
+    connect(keyRefuel, &QShortcut::activated,
+            this, &MainWindow::refuelButtonClicked);
 
     // Skrót klawiszowy F1
     auto scHelp = new QShortcut(QKeySequence(Qt::Key_F1), this);
@@ -122,33 +136,6 @@ void MainWindow::updateSimulation()
 {
     car.update(DT);
     dashboard->refresh(car);
-
-    /*
-    // do testów drogi hamowania:
-    double v = car.getCurrentSpeed();
-    bool brake = car.getBrakeStatus();
-    double d = car.getDistance();
-
-    // Początek hamowania
-    if (brake && !brakingTestActive && v > 0.1) {
-        brakingTestActive = true;
-        brakeStartDist = d;
-        vStart = v;
-    }
-
-    // Zatrzymanie
-    if (brakingTestActive && v <= 0.01) {
-        double stopDist = (d - brakeStartDist);
-        brakingTestActive = false;
-
-        QMessageBox::information(
-            this,
-            "Test hamowania",
-            QString("Zatrzymanie z %1 km/h zajęło %2 m.")
-                .arg(vStart, 0, 'f', 1)
-                .arg(stopDist, 0, 'f', 1)
-            );
-    }*/
 }
 
 void MainWindow::engineButtonClicked() {
@@ -163,12 +150,9 @@ void MainWindow::engineButtonClicked() {
 
     if (!car.getEngineStatus())
         {car.setEngineStatus(true);
-        //refreshUI();
     }
     else
         car.setEngineStatus(false);
-
-    //refreshUI();
 }
 
 void MainWindow::throttleButtonClicked() {
@@ -195,7 +179,6 @@ void MainWindow::brakeButtonClicked() {
     } else {
         car.setBrakeStatus(false);
     }
-    //refreshUI();
 }
 void MainWindow::quitButtonClicked(){
     QMessageBox::warning(
@@ -230,6 +213,7 @@ void MainWindow::showHelpDialog()
         "🔼 <b>Strzałka w górę</b> – Dodaj gazu<br>"
         "🔽 <b>Strzałka w dół</b> – Odejmij gazu<br>"
         "⎵ <b>Spacja</b> – Hamulec<br>"
+        "⛽ <b>R</b> – Tankowanie +5 L<br>"
         "⏻ <b>Q</b> – Zakończ program<br>"
         "❓ <b>F1</b> – Pokaż pomoc"
         "</p>"
@@ -256,4 +240,10 @@ void MainWindow::showHelpDialog()
 
     helpDialog.setLayout(layout);
     helpDialog.exec();
+}
+
+void MainWindow::refuelButtonClicked()
+{
+    car.refuel(5.0);          // debug: +5 L
+    dashboard->refresh(car);  // odśwież GUI
 }

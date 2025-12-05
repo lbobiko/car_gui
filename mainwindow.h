@@ -9,6 +9,7 @@
 #include <QKeyEvent>
 #include <QShortcut>
 #include "Dashboard.h"
+#include "ConsumptionModel.h"
 
 QT_BEGIN_NAMESPACE
 namespace Ui {
@@ -34,20 +35,18 @@ private slots:
     void brakeButtonClicked();
     void quitButtonClicked();
     void showHelpDialog();
+    void refuelButtonClicked();
 
 private:
     Ui::MainWindow *ui;
     Car car;
+    EcoConsumption    ecoModel_;
+    NormalConsumption normalModel_;
+    SportConsumption  sportModel_;
     void updateSimulation();
-    //void refreshUI();  // odświeża wszystkie labele
     void setStatus(QLabel* lbl, const QString& text, const QString& color);
     QTimer *timer;
-    //int counter = 0;
     Dashboard* dashboard = nullptr;
-    // do testów hamulca:
-    //bool brakingTestActive = false;
-    //double brakeStartDist = 0.0;
-    //double vStart = 0.0;
 
 
 };

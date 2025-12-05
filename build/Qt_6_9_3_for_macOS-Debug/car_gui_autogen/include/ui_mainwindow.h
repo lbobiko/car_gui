@@ -37,6 +37,9 @@ public:
     QLabel *brakeInfo;
     QPushButton *quitButton;
     QPushButton *helpButton;
+    QLabel *fuelInfo;
+    QLabel *speedText_2;
+    QPushButton *refuelButton;
     QMenuBar *menubar;
     QStatusBar *statusbar;
 
@@ -58,10 +61,10 @@ public:
         brakeButton->setGeometry(QRect(410, 460, 151, 41));
         speedInfo = new QLabel(centralwidget);
         speedInfo->setObjectName("speedInfo");
-        speedInfo->setGeometry(QRect(210, 280, 111, 41));
+        speedInfo->setGeometry(QRect(230, 280, 111, 41));
         speedText = new QLabel(centralwidget);
         speedText->setObjectName("speedText");
-        speedText->setGeometry(QRect(210, 340, 131, 31));
+        speedText->setGeometry(QRect(230, 340, 131, 31));
         distanceText = new QLabel(centralwidget);
         distanceText->setObjectName("distanceText");
         distanceText->setGeometry(QRect(10, 10, 141, 41));
@@ -86,6 +89,15 @@ public:
         helpButton = new QPushButton(centralwidget);
         helpButton->setObjectName("helpButton");
         helpButton->setGeometry(QRect(640, 60, 151, 41));
+        fuelInfo = new QLabel(centralwidget);
+        fuelInfo->setObjectName("fuelInfo");
+        fuelInfo->setGeometry(QRect(20, 280, 150, 41));
+        speedText_2 = new QLabel(centralwidget);
+        speedText_2->setObjectName("speedText_2");
+        speedText_2->setGeometry(QRect(20, 340, 131, 31));
+        refuelButton = new QPushButton(centralwidget);
+        refuelButton->setObjectName("refuelButton");
+        refuelButton->setGeometry(QRect(220, 460, 151, 41));
         MainWindow->setCentralWidget(centralwidget);
         menubar = new QMenuBar(MainWindow);
         menubar->setObjectName("menubar");
@@ -116,6 +128,9 @@ public:
         brakeInfo->setText(QString());
         quitButton->setText(QCoreApplication::translate("MainWindow", "Quit program", nullptr));
         helpButton->setText(QCoreApplication::translate("MainWindow", "Help", nullptr));
+        fuelInfo->setText(QCoreApplication::translate("MainWindow", "fuel", nullptr));
+        speedText_2->setText(QCoreApplication::translate("MainWindow", "FUEL LEFT", nullptr));
+        refuelButton->setText(QCoreApplication::translate("MainWindow", "Refuel +5L", nullptr));
     } // retranslateUi
 
 };

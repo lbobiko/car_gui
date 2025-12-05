@@ -69,13 +69,13 @@
 			{
 				"command" : 4,
 				"file" : 1,
-				"line" : 68,
+				"line" : 71,
 				"parent" : 0
 			},
 			{
 				"command" : 5,
 				"file" : 1,
-				"line" : 51,
+				"line" : 54,
 				"parent" : 0
 			},
 			{
@@ -303,18 +303,21 @@
 				8,
 				10,
 				13,
-				15
+				15,
+				17,
+				19,
+				21
 			]
 		}
 	],
 	"dependencies" : 
 	[
 		{
-			"id" : "car_gui_autogen_timestamp_deps::@6890427a1f51a3e7e1df"
-		},
-		{
 			"backtrace" : 0,
 			"id" : "car_gui_autogen::@6890427a1f51a3e7e1df"
+		},
+		{
+			"id" : "car_gui_autogen_timestamp_deps::@6890427a1f51a3e7e1df"
 		}
 	],
 	"id" : "car_gui::@6890427a1f51a3e7e1df",
@@ -425,7 +428,10 @@
 				8,
 				10,
 				13,
-				15
+				15,
+				17,
+				19,
+				21
 			]
 		},
 		{
@@ -439,7 +445,10 @@
 				11,
 				12,
 				14,
-				16
+				16,
+				18,
+				20,
+				22
 			]
 		},
 		{
@@ -453,14 +462,14 @@
 			"name" : "",
 			"sourceIndexes" : 
 			[
-				17
+				23
 			]
 		},
 		{
 			"name" : "CMake Rules",
 			"sourceIndexes" : 
 			[
-				18
+				24
 			]
 		}
 	],
@@ -553,6 +562,39 @@
 			"backtrace" : 4,
 			"compileGroupIndex" : 0,
 			"path" : "Transmission.cpp",
+			"sourceGroupIndex" : 0
+		},
+		{
+			"backtrace" : 4,
+			"path" : "Dashboard.h",
+			"sourceGroupIndex" : 1
+		},
+		{
+			"backtrace" : 4,
+			"compileGroupIndex" : 0,
+			"path" : "Dashboard.cpp",
+			"sourceGroupIndex" : 0
+		},
+		{
+			"backtrace" : 4,
+			"path" : "ConsumptionModel.h",
+			"sourceGroupIndex" : 1
+		},
+		{
+			"backtrace" : 4,
+			"compileGroupIndex" : 0,
+			"path" : "ConsumptionModel.cpp",
+			"sourceGroupIndex" : 0
+		},
+		{
+			"backtrace" : 4,
+			"path" : "TripComputer.h",
+			"sourceGroupIndex" : 1
+		},
+		{
+			"backtrace" : 4,
+			"compileGroupIndex" : 0,
+			"path" : "TripComputer.cpp",
 			"sourceGroupIndex" : 0
 		},
 		{

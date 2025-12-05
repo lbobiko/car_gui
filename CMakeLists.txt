@@ -30,6 +30,8 @@ if(${QT_VERSION_MAJOR} GREATER_EQUAL 6)
         FuelTank.h FuelTank.cpp
         Transmission.h Transmission.cpp
         Dashboard.h Dashboard.cpp
+        ConsumptionModel.h ConsumptionModel.cpp
+        TripComputer.h TripComputer.cpp
     )
 # Define target properties for Android with Qt 6 as:
 #    set_property(TARGET car_gui APPEND PROPERTY QT_ANDROID_PACKAGE_SOURCE_DIR

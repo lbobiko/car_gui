@@ -6,13 +6,15 @@ Dashboard::Dashboard(QLabel* engineInfo,
                      QLabel* throttleDetail,
                      QLabel* brakeInfo,
                      QLabel* speedInfo,
-                     QLabel* distanceInfo)
+                     QLabel* distanceInfo,
+                     QLabel* fuelInfo)
     : engineInfo_(engineInfo),
     throttleInfo_(throttleInfo),
     throttleDet_(throttleDetail),
     brakeInfo_(brakeInfo),
     speedInfo_(speedInfo),
-    distanceInfo_(distanceInfo)
+    distanceInfo_(distanceInfo),
+    fuelInfo_(fuelInfo)
 {
     // opcjonalne startowe wartości/formaty
     if (speedInfo_) {
@@ -83,5 +85,28 @@ void Dashboard::refresh(const Car& car) {
     if (distanceInfo_) {
         const double dKm = car.getDistance() / 1000.0;
         distanceInfo_->setText(QString::number(dKm, 'f', 2) + " km");
+    }
+    // --- Fuel ---
+    if (fuelInfo_) {
+        double level = car.getFuelLevel();     // L
+        double cap   = car.getFuelCapacity();  // L
+        double perc  = (cap > 0.0) ? (level / cap) * 100.0 : 0.0;
+
+        QString text = QString("Fuel: %1 L (%2%)")
+                           .arg(level, 0, 'f', 3)
+                           .arg(perc,  0, 'f', 1);
+
+        QString color;
+        if (perc > 50.0) {
+            color = "green";
+        } else if (perc > 20.0) {
+            color = "orange";
+        } else {
+            color = "red";    // rezerwa
+        }
+
+        fuelInfo_->setStyleSheet(
+            QString("color:%1; font-weight:bold;").arg(color));
+        fuelInfo_->setText(text);
     }
 }

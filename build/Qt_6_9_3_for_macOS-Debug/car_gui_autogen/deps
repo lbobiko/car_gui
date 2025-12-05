@@ -1172,6 +1172,8 @@ car_gui_autogen/timestamp: \
 	/Users/lukebobinski/qtrepos/car_gui/Car.cpp \
 	/Users/lukebobinski/qtrepos/car_gui/Car.h \
 	/Users/lukebobinski/qtrepos/car_gui/Constants.h \
+	/Users/lukebobinski/qtrepos/car_gui/ConsumptionModel.cpp \
+	/Users/lukebobinski/qtrepos/car_gui/ConsumptionModel.h \
 	/Users/lukebobinski/qtrepos/car_gui/Dashboard.cpp \
 	/Users/lukebobinski/qtrepos/car_gui/Dashboard.h \
 	/Users/lukebobinski/qtrepos/car_gui/Engine.cpp \

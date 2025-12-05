@@ -926,5 +926,8 @@
   /Users/lukebobinski/Qt/6.9.3/macos/lib/QtWidgets.framework/Versions/A/Headers/qwidget.h \
   /Users/lukebobinski/qtrepos/car_gui/Brake.h \
   /Users/lukebobinski/qtrepos/car_gui/Car.h \
+  /Users/lukebobinski/qtrepos/car_gui/Constants.h \
+  /Users/lukebobinski/qtrepos/car_gui/ConsumptionModel.h \
   /Users/lukebobinski/qtrepos/car_gui/Dashboard.h \
-  /Users/lukebobinski/qtrepos/car_gui/Engine.h
+  /Users/lukebobinski/qtrepos/car_gui/Engine.h \
+  /Users/lukebobinski/qtrepos/car_gui/FuelTank.h
