@@ -4,6 +4,8 @@
 #include <QWidget>
 #include <QLabel>
 #include <QString>
+#include <QLabel>
+#include <QProgressBar>
 
 class Car; // forward
 
@@ -19,7 +21,8 @@ public:
               QLabel* tripDistanceInfo,
               QLabel* tripAvgConsInfo,
               QLabel* tripTimeInfo,
-              QLabel* tripAvgSpeedInfo);
+              QLabel* tripAvgSpeedInfo,
+              QProgressBar* fuelBar);
 
     void refresh(const Car& car);
 
@@ -36,6 +39,8 @@ private:
     QLabel* tripAvgConsInfo_  = nullptr;
     QLabel* tripTimeInfo_     = nullptr;
     QLabel* tripAvgSpeedInfo_ = nullptr;
+
+    QProgressBar* fuelBar_   = nullptr;
 
     void setStatus(QLabel* lbl, const QString& text, const QString& color);
 };

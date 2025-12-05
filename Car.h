@@ -27,6 +27,8 @@ private:
 
     TripComputer tripComputer_;
 
+    bool fuelWarningShown_ = false;
+
 public:
     Car();
 
@@ -60,6 +62,9 @@ public:
     double getTripAvgSpeedKmh() const;
 
     void resetTrip();
+
+    bool shouldShowFuelWarning() const;
+    void resetFuelWarning();
 };
 
 #endif

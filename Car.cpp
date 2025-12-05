@@ -54,61 +54,6 @@ double Car::getCurrentSpeed() const{
 }
 
 
-/*void Car::update(double dt)
-{
-    double F_eng = 0.0;
-    double F_roll = 0.0;
-    double F_drag = 0.0;
-    double F_brake = 0.0;
-
-    double v = v_mps;
-    bool engineOn = engine.getEngineStatus();
-    bool noFuel   = fuelTank_.isEmpty();
-
-    // brak paliwa → gasimy silnik
-    if (noFuel && engineOn) {
-        engine.setEngineStatus(false);
-        engineOn = false;
-        throttle = 0.0;
-    }
-
-    // SIŁY MECHANICZNE
-    if (engineOn && throttle > 0.0) {
-        F_eng = K_THROTTLE * throttle;
-    }
-
-    if (v > 0.0) {
-        F_roll = C_ROLL;
-        F_drag = C_DRAG * v * v;
-    }
-
-    if (brake.getBrakePressed()) {
-        F_brake = K_BRAKE;
-    }
-
-    double F = F_eng - F_roll - F_drag - F_brake;
-    if (v <= 0.0 && F < 0.0) F = 0.0;
-
-    double a    = F / MASS_KG;
-    double vNew = v + a * dt;
-
-    if (vNew < 0.0)      vNew = 0.0;
-    if (vNew > VMAX_MPS) vNew = VMAX_MPS;
-
-    x_m   += vNew * dt;
-    v_mps  = vNew;
-
-    // --------- PALIWO -----------
-    double fuelFlow = 0.0;
-    if (engineOn && consumption_) {
-        double v_kmh = vNew * 3.6;
-        fuelFlow = consumption_->fuelFlowLps(throttle, v_kmh);  // L/s
-    }
-
-    double used = fuelTank_.consume(fuelFlow * dt); // L
-    fuelUsedTotal_ += used;
-}*/
-
 void Car::update(double dt)
 {
     if (dt <= 0.0) return;
@@ -122,7 +67,8 @@ void Car::update(double dt)
     if (noFuel && engineOn) {
         engine.setEngineStatus(false);
         engineOn = false;
-        throttle = 0.0;
+        throttle = 0.0;      // pedał gazu ignorowany
+        fuelWarningShown_ = true;   // flaga
     }
 
     // --- SIŁY ---
@@ -195,6 +141,8 @@ void Car::update(double dt)
 
     bool engineReallyOn = engineOn && !fuelTank_.isEmpty();
     tripComputer_.addSample(dx, usedNow, dt, engineReallyOn);
+
+
 }
 
 double Car::getFuelLevel() const {
@@ -234,4 +182,11 @@ double Car::getTripAvgSpeedKmh() const     {
 
 void Car::resetTrip() {
     tripComputer_.reset();
+}
+
+bool Car::shouldShowFuelWarning() const {
+    return fuelWarningShown_;
+}
+void Car::resetFuelWarning() {
+    fuelWarningShown_ = false;
 }

@@ -46,7 +46,9 @@ template <> constexpr inline auto MainWindow::qt_create_metaobjectdata<qt_meta_t
         "brakeButtonClicked",
         "quitButtonClicked",
         "showHelpDialog",
-        "refuelButtonClicked"
+        "refuelButtonClicked",
+        "modeChanged",
+        "index"
     };
 
     QtMocHelpers::UintData qt_methods {
@@ -62,6 +64,10 @@ template <> constexpr inline auto MainWindow::qt_create_metaobjectdata<qt_meta_t
         QtMocHelpers::SlotData<void()>(6, 2, QMC::AccessPrivate, QMetaType::Void),
         // Slot 'refuelButtonClicked'
         QtMocHelpers::SlotData<void()>(7, 2, QMC::AccessPrivate, QMetaType::Void),
+        // Slot 'modeChanged'
+        QtMocHelpers::SlotData<void(int)>(8, 2, QMC::AccessPrivate, QMetaType::Void, {{
+            { QMetaType::Int, 9 },
+        }}),
     };
     QtMocHelpers::UintData qt_properties {
     };
@@ -91,10 +97,10 @@ void MainWindow::qt_static_metacall(QObject *_o, QMetaObject::Call _c, int _id, 
         case 3: _t->quitButtonClicked(); break;
         case 4: _t->showHelpDialog(); break;
         case 5: _t->refuelButtonClicked(); break;
+        case 6: _t->modeChanged((*reinterpret_cast< std::add_pointer_t<int>>(_a[1]))); break;
         default: ;
         }
     }
-    (void)_a;
 }
 
 const QMetaObject *MainWindow::metaObject() const
@@ -116,14 +122,14 @@ int MainWindow::qt_metacall(QMetaObject::Call _c, int _id, void **_a)
     if (_id < 0)
         return _id;
     if (_c == QMetaObject::InvokeMetaMethod) {
-        if (_id < 6)
+        if (_id < 7)
             qt_static_metacall(this, _c, _id, _a);
-        _id -= 6;
+        _id -= 7;
     }
     if (_c == QMetaObject::RegisterMethodArgumentMetaType) {
-        if (_id < 6)
+        if (_id < 7)
             *reinterpret_cast<QMetaType *>(_a[0]) = QMetaType();
-        _id -= 6;
+        _id -= 7;
     }
     return _id;
 }

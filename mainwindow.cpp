@@ -21,6 +21,35 @@ MainWindow::MainWindow(QWidget *parent)
 
     car.setConsumptionModel(&normalModel_);
 
+    // Combo z wyborem trybu
+    ui->modeCombo->setCurrentIndex(1); // 0=Eco, 1=Normal, 2=Sport
+    connect(ui->modeCombo, SIGNAL(currentIndexChanged(int)),
+            this, SLOT(modeChanged(int)));
+
+    ui->modeLabel->setText("Mode: Normal");
+    ui->modeLabel->setStyleSheet("color: #00ccff; font-weight: bold; font-size: 16px;");
+
+    ui->fuelBar->setRange(0, 100);        // procent paliwa
+    ui->fuelBar->setValue(0);             // na start 0%
+    ui->fuelBar->setTextVisible(false);   // bez napisu na pasku
+
+    // żeby było widać na ciemnym tle
+    ui->fuelBar->setStyleSheet(
+        "QProgressBar {"
+        "  border: 1px solid #555;"
+        "  border-radius: 4px;"
+        "  background-color: #222;"
+        "}"
+        "QProgressBar::chunk {"
+        "  background-color: #0f0;"
+        "}"
+        );
+
+    // efekt przezroczystości dla modeLabel
+    modeLabelEffect = new QGraphicsOpacityEffect(this);
+    modeLabelEffect->setOpacity(1.0);
+    ui->modeLabel->setGraphicsEffect(modeLabelEffect);
+
     dashboard = new Dashboard(
         ui->engineInfo,
         ui->throttleInfo,
@@ -32,7 +61,8 @@ MainWindow::MainWindow(QWidget *parent)
         ui->tripDistanceInfo,
         ui->tripAvgConsInfo,
         ui->tripTimeInfo,
-        ui->tripAvgSpeedInfo
+        ui->tripAvgSpeedInfo,
+        ui->fuelBar
         );
 
     // pierwsze odświeżenie, żeby UI nie było puste
@@ -86,6 +116,23 @@ MainWindow::MainWindow(QWidget *parent)
     });
 
     connect(ui->quitButton, &QPushButton::clicked, this, &MainWindow::quitButtonClicked);
+
+    // Skróty zmiany trybu jazdy
+    auto scModeEco    = new QShortcut(QKeySequence(Qt::Key_1), this);
+    auto scModeNormal = new QShortcut(QKeySequence(Qt::Key_2), this);
+    auto scModeSport  = new QShortcut(QKeySequence(Qt::Key_3), this);
+
+    connect(scModeEco,    &QShortcut::activated, this, [this]{
+        ui->modeCombo->setCurrentIndex(0); // Eco
+    });
+
+    connect(scModeNormal, &QShortcut::activated, this, [this]{
+        ui->modeCombo->setCurrentIndex(1); // Normal
+    });
+
+    connect(scModeSport,  &QShortcut::activated, this, [this]{
+        ui->modeCombo->setCurrentIndex(2); // Sport
+    });
 
     // Reset button
     connect(ui->resetTripButton, &QPushButton::clicked,
@@ -147,6 +194,18 @@ void MainWindow::updateSimulation()
 {
     car.update(DT);
     dashboard->refresh(car);
+
+    if (car.shouldShowFuelWarning()) {
+        QMessageBox::warning(
+            this,
+            "Brak paliwa!",
+            "Silnik został wyłączony z powodu braku paliwa.\n"
+            "Zatankuj, aby kontynuować jazdę."
+            );
+
+        car.resetFuelWarning();
+    }
+
 }
 
 void MainWindow::engineButtonClicked() {
@@ -200,7 +259,7 @@ void MainWindow::quitButtonClicked(){
     QApplication::quit();
 }
 
-void MainWindow::showHelpDialog()
+/*void MainWindow::showHelpDialog()
 {
     // okno dialogowe
     QDialog helpDialog(this);
@@ -251,6 +310,70 @@ void MainWindow::showHelpDialog()
 
     helpDialog.setLayout(layout);
     helpDialog.exec();
+}*/
+
+void MainWindow::showHelpDialog()
+{
+    QDialog helpDialog(this);
+    helpDialog.setWindowTitle("Pomoc – Sterowanie Symulatorem");
+    helpDialog.setModal(true);
+    helpDialog.resize(500, 460);
+    helpDialog.setStyleSheet(
+        "background-color: #111;"
+        "color: #eee;"
+        "font-family: 'Courier New';"
+        "font-size: 14px;"
+        "border: 2px solid #0f0;"
+        );
+
+    QLabel *info = new QLabel(&helpDialog);
+    info->setText(
+        "<h3 style='color:#0f0;'>🧭 Sterowanie symulatorem</h3>"
+        "<p>"
+        "🟢 <b>E</b> – Uruchom / wyłącz silnik<br>"
+        "🔼 <b>Strzałka w górę</b> – Gaz 100%<br>"
+        "🔽 <b>Strzałka w dół</b> – Gaz 0%<br>"
+        "⎵ <b>Spacja</b> – Hamowanie (działa tylko trzymane)<br>"
+        "🔄 <b>R</b> – Tankowanie +5 L<br>"
+        "<br>"
+        "⚙️ <b>Zmiana trybu spalania</b>:<br>"
+        "&nbsp;&nbsp;&nbsp;① <b>1</b> – Eco<br>"
+        "&nbsp;&nbsp;&nbsp;② <b>2</b> – Normal<br>"
+        "&nbsp;&nbsp;&nbsp;③ <b>3</b> – Sport<br>"
+        "<br>"
+        "⛽ <b>Pasek paliwa</b>: kolor zmienia się przy niskim poziomie<br>"
+        "&nbsp;&nbsp;&nbsp;• zielony – >20%<br>"
+        "&nbsp;&nbsp;&nbsp;• pomarańczowy – 10–20%<br>"
+        "&nbsp;&nbsp;&nbsp;• czerwony – <10%<br>"
+        "<br>"
+        "📊 <b>Trip Computer</b> mierzy:<br>"
+        "&nbsp;&nbsp;&nbsp;• czas jazdy<br>"
+        "&nbsp;&nbsp;&nbsp;• dystans<br>"
+        "&nbsp;&nbsp;&nbsp;• średnią prędkość<br>"
+        "&nbsp;&nbsp;&nbsp;• średnie zużycie paliwa<br>"
+        "Możesz go wyzerować przyciskiem <b>Reset trip</b>."
+        "</p>"
+        "<hr>"
+        "<p style='color:#ccc;'>Symulator aktualizuje stan co 20 ms (DT = 0.02 s).</p>"
+        );
+
+    info->setWordWrap(true);
+    info->setAlignment(Qt::AlignLeft | Qt::AlignTop);
+
+    QPushButton *closeBtn = new QPushButton("Zamknij", &helpDialog);
+    closeBtn->setStyleSheet(
+        "QPushButton { background-color: #0f0; color: black; font-weight: bold; "
+        "padding: 6px 12px; border-radius: 6px; }"
+        "QPushButton:hover { background-color: #1f1; }"
+        );
+    connect(closeBtn, &QPushButton::clicked, &helpDialog, &QDialog::accept);
+
+    QVBoxLayout *layout = new QVBoxLayout(&helpDialog);
+    layout->addWidget(info);
+    layout->addWidget(closeBtn, 0, Qt::AlignCenter);
+
+    helpDialog.setLayout(layout);
+    helpDialog.exec();
 }
 
 void MainWindow::refuelButtonClicked()
@@ -258,3 +381,41 @@ void MainWindow::refuelButtonClicked()
     car.refuel(5.0);          // debug: +5 L
     dashboard->refresh(car);  // odśwież GUI
 }
+
+void MainWindow::modeChanged(int index)
+{
+    if (index == 0) {
+        car.setConsumptionModel(&ecoModel_);
+        ui->modeLabel->setStyleSheet("color: #00ff00; font-weight: bold; font-size: 16px;");
+        ui->modeLabel->setText("Mode: Eco");
+    }
+    else if (index == 1) {
+        car.setConsumptionModel(&normalModel_);
+        ui->modeLabel->setStyleSheet("color: #00ccff; font-weight: bold; font-size: 16px;");
+        ui->modeLabel->setText("Mode: Normal");
+    }
+    else if (index == 2) {
+        car.setConsumptionModel(&sportModel_);
+        ui->modeLabel->setStyleSheet("color: #ff0000; font-weight: bold; font-size: 16px;");
+        ui->modeLabel->setText("Mode: Sport");
+    }
+
+    // <<< tu:
+    animateModeLabel();
+}
+
+void MainWindow::animateModeLabel()
+{
+    if (!modeLabelEffect) return;
+
+    // animacja "rozbłysku": z 0.2 do 1.0 opacity
+    auto* anim = new QPropertyAnimation(modeLabelEffect, "opacity", this);
+    anim->setDuration(250);              // 0.25 s – krótki efekt
+    anim->setStartValue(0.2);            // prawie zniknięte
+    anim->setEndValue(1.0);              // pełna widoczność
+    anim->setEasingCurve(QEasingCurve::OutQuad);
+
+    anim->start(QAbstractAnimation::DeleteWhenStopped);
+}
+
+

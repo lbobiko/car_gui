@@ -11,7 +11,8 @@ Dashboard::Dashboard(QLabel* engineInfo,
                      QLabel* tripDistanceInfo,
                      QLabel* tripAvgConsInfo,
                      QLabel* tripTimeInfo,
-                     QLabel* tripAvgSpeedInfo)
+                     QLabel* tripAvgSpeedInfo,
+                     QProgressBar* fuelBar)
     : engineInfo_(engineInfo),
     throttleInfo_(throttleInfo),
     throttleDet_(throttleDetail),
@@ -22,11 +23,17 @@ Dashboard::Dashboard(QLabel* engineInfo,
     tripDistanceInfo_(tripDistanceInfo),
     tripAvgConsInfo_(tripAvgConsInfo),
     tripTimeInfo_(tripTimeInfo),
-    tripAvgSpeedInfo_(tripAvgSpeedInfo)
+    tripAvgSpeedInfo_(tripAvgSpeedInfo),
+    fuelBar_(fuelBar)
 {
     // opcjonalne startowe wartości/formaty
     if (speedInfo_) {
         speedInfo_->setStyleSheet("font-size:28px; font-weight:bold; font-family:'Courier New';");
+    }
+    if (fuelBar_) {
+        fuelBar_->setRange(0, 100);
+        fuelBar_->setValue(0);
+        fuelBar_->setTextVisible(false);
     }
 }
 
@@ -117,6 +124,38 @@ void Dashboard::refresh(const Car& car) {
             QString("color:%1; font-weight:bold;").arg(color));
         fuelInfo_->setText(text);
     }
+
+    // Pasek paliwa
+    if (fuelBar_) {
+        double level = car.getFuelLevel();
+        double cap   = car.getFuelCapacity();
+        int percInt  = 0;
+
+        if (cap > 0.0) {
+            percInt = static_cast<int>((level / cap) * 100.0 + 0.5); // zaokrąglenie
+        }
+
+        if (percInt < 0)   percInt = 0;
+        if (percInt > 100) percInt = 100;
+
+        fuelBar_->setValue(percInt);
+
+        // opcjonalnie: zmiana koloru w zależności od poziomu
+        if (percInt > 50) {
+            fuelBar_->setStyleSheet(
+                "QProgressBar { border: 1px solid gray; border-radius: 3px; }"
+                "QProgressBar::chunk { background-color: #00cc00; }");
+        } else if (percInt > 20) {
+            fuelBar_->setStyleSheet(
+                "QProgressBar { border: 1px solid gray; border-radius: 3px; }"
+                "QProgressBar::chunk { background-color: #ffcc00; }");
+        } else {
+            fuelBar_->setStyleSheet(
+                "QProgressBar { border: 1px solid gray; border-radius: 3px; }"
+                "QProgressBar::chunk { background-color: #ff0000; }");
+        }
+    }
+
     // ---------- TripComputer ----------
     if (tripDistanceInfo_) {
         double dKm = car.getTripDistanceKm();

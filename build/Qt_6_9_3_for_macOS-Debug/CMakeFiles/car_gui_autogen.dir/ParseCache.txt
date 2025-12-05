@@ -742,6 +742,7 @@
  mdp:/Applications/Xcode.app/Contents/Developer/Toolchains/XcodeDefault.xctoolchain/usr/lib/clang/17/include/stdarg.h
  mdp:/Users/lukebobinski/Qt/6.9.3/macos/lib/QtCore.framework/Versions/A/Headers/QList
  mdp:/Users/lukebobinski/Qt/6.9.3/macos/lib/QtCore.framework/Versions/A/Headers/QObject
+ mdp:/Users/lukebobinski/Qt/6.9.3/macos/lib/QtCore.framework/Versions/A/Headers/QPropertyAnimation
  mdp:/Users/lukebobinski/Qt/6.9.3/macos/lib/QtCore.framework/Versions/A/Headers/QRect
  mdp:/Users/lukebobinski/Qt/6.9.3/macos/lib/QtCore.framework/Versions/A/Headers/QSize
  mdp:/Users/lukebobinski/Qt/6.9.3/macos/lib/QtCore.framework/Versions/A/Headers/QSizeF
@@ -754,6 +755,7 @@
  mdp:/Users/lukebobinski/Qt/6.9.3/macos/lib/QtCore.framework/Versions/A/Headers/q20type_traits.h
  mdp:/Users/lukebobinski/Qt/6.9.3/macos/lib/QtCore.framework/Versions/A/Headers/q20utility.h
  mdp:/Users/lukebobinski/Qt/6.9.3/macos/lib/QtCore.framework/Versions/A/Headers/q23utility.h
+ mdp:/Users/lukebobinski/Qt/6.9.3/macos/lib/QtCore.framework/Versions/A/Headers/qabstractanimation.h
  mdp:/Users/lukebobinski/Qt/6.9.3/macos/lib/QtCore.framework/Versions/A/Headers/qabstracteventdispatcher.h
  mdp:/Users/lukebobinski/Qt/6.9.3/macos/lib/QtCore.framework/Versions/A/Headers/qalgorithms.h
  mdp:/Users/lukebobinski/Qt/6.9.3/macos/lib/QtCore.framework/Versions/A/Headers/qanystringview.h
@@ -788,6 +790,7 @@
  mdp:/Users/lukebobinski/Qt/6.9.3/macos/lib/QtCore.framework/Versions/A/Headers/qdatastream.h
  mdp:/Users/lukebobinski/Qt/6.9.3/macos/lib/QtCore.framework/Versions/A/Headers/qdeadlinetimer.h
  mdp:/Users/lukebobinski/Qt/6.9.3/macos/lib/QtCore.framework/Versions/A/Headers/qdebug.h
+ mdp:/Users/lukebobinski/Qt/6.9.3/macos/lib/QtCore.framework/Versions/A/Headers/qeasingcurve.h
  mdp:/Users/lukebobinski/Qt/6.9.3/macos/lib/QtCore.framework/Versions/A/Headers/qelapsedtimer.h
  mdp:/Users/lukebobinski/Qt/6.9.3/macos/lib/QtCore.framework/Versions/A/Headers/qendian.h
  mdp:/Users/lukebobinski/Qt/6.9.3/macos/lib/QtCore.framework/Versions/A/Headers/qeventloop.h
@@ -829,6 +832,7 @@
  mdp:/Users/lukebobinski/Qt/6.9.3/macos/lib/QtCore.framework/Versions/A/Headers/qpair.h
  mdp:/Users/lukebobinski/Qt/6.9.3/macos/lib/QtCore.framework/Versions/A/Headers/qpoint.h
  mdp:/Users/lukebobinski/Qt/6.9.3/macos/lib/QtCore.framework/Versions/A/Headers/qprocessordetection.h
+ mdp:/Users/lukebobinski/Qt/6.9.3/macos/lib/QtCore.framework/Versions/A/Headers/qpropertyanimation.h
  mdp:/Users/lukebobinski/Qt/6.9.3/macos/lib/QtCore.framework/Versions/A/Headers/qrect.h
  mdp:/Users/lukebobinski/Qt/6.9.3/macos/lib/QtCore.framework/Versions/A/Headers/qrefcount.h
  mdp:/Users/lukebobinski/Qt/6.9.3/macos/lib/QtCore.framework/Versions/A/Headers/qscopedpointer.h
@@ -881,6 +885,7 @@
  mdp:/Users/lukebobinski/Qt/6.9.3/macos/lib/QtCore.framework/Versions/A/Headers/qurl.h
  mdp:/Users/lukebobinski/Qt/6.9.3/macos/lib/QtCore.framework/Versions/A/Headers/qutf8stringview.h
  mdp:/Users/lukebobinski/Qt/6.9.3/macos/lib/QtCore.framework/Versions/A/Headers/qvariant.h
+ mdp:/Users/lukebobinski/Qt/6.9.3/macos/lib/QtCore.framework/Versions/A/Headers/qvariantanimation.h
  mdp:/Users/lukebobinski/Qt/6.9.3/macos/lib/QtCore.framework/Versions/A/Headers/qvarlengtharray.h
  mdp:/Users/lukebobinski/Qt/6.9.3/macos/lib/QtCore.framework/Versions/A/Headers/qversiontagging.h
  mdp:/Users/lukebobinski/Qt/6.9.3/macos/lib/QtCore.framework/Versions/A/Headers/qxptype_traits.h
@@ -927,12 +932,16 @@
  mdp:/Users/lukebobinski/Qt/6.9.3/macos/lib/QtGui.framework/Versions/A/Headers/qvector2d.h
  mdp:/Users/lukebobinski/Qt/6.9.3/macos/lib/QtGui.framework/Versions/A/Headers/qvectornd.h
  mdp:/Users/lukebobinski/Qt/6.9.3/macos/lib/QtGui.framework/Versions/A/Headers/qwindowdefs.h
+ mdp:/Users/lukebobinski/Qt/6.9.3/macos/lib/QtWidgets.framework/Versions/A/Headers/QGraphicsOpacityEffect
  mdp:/Users/lukebobinski/Qt/6.9.3/macos/lib/QtWidgets.framework/Versions/A/Headers/QLabel
  mdp:/Users/lukebobinski/Qt/6.9.3/macos/lib/QtWidgets.framework/Versions/A/Headers/QMainWindow
+ mdp:/Users/lukebobinski/Qt/6.9.3/macos/lib/QtWidgets.framework/Versions/A/Headers/QProgressBar
  mdp:/Users/lukebobinski/Qt/6.9.3/macos/lib/QtWidgets.framework/Versions/A/Headers/QWidget
  mdp:/Users/lukebobinski/Qt/6.9.3/macos/lib/QtWidgets.framework/Versions/A/Headers/qframe.h
+ mdp:/Users/lukebobinski/Qt/6.9.3/macos/lib/QtWidgets.framework/Versions/A/Headers/qgraphicseffect.h
  mdp:/Users/lukebobinski/Qt/6.9.3/macos/lib/QtWidgets.framework/Versions/A/Headers/qlabel.h
  mdp:/Users/lukebobinski/Qt/6.9.3/macos/lib/QtWidgets.framework/Versions/A/Headers/qmainwindow.h
+ mdp:/Users/lukebobinski/Qt/6.9.3/macos/lib/QtWidgets.framework/Versions/A/Headers/qprogressbar.h
  mdp:/Users/lukebobinski/Qt/6.9.3/macos/lib/QtWidgets.framework/Versions/A/Headers/qsizepolicy.h
  mdp:/Users/lukebobinski/Qt/6.9.3/macos/lib/QtWidgets.framework/Versions/A/Headers/qtabwidget.h
  mdp:/Users/lukebobinski/Qt/6.9.3/macos/lib/QtWidgets.framework/Versions/A/Headers/qtwidgets-config.h

@@ -10,6 +10,8 @@
 #include <QShortcut>
 #include "Dashboard.h"
 #include "ConsumptionModel.h"
+#include <QGraphicsOpacityEffect>
+#include <QPropertyAnimation>
 
 QT_BEGIN_NAMESPACE
 namespace Ui {
@@ -37,6 +39,8 @@ private slots:
     void showHelpDialog();
     void refuelButtonClicked();
 
+    void modeChanged(int index);
+
 private:
     Ui::MainWindow *ui;
     Car car;
@@ -47,6 +51,10 @@ private:
     void setStatus(QLabel* lbl, const QString& text, const QString& color);
     QTimer *timer;
     Dashboard* dashboard = nullptr;
+
+    QGraphicsOpacityEffect* modeLabelEffect = nullptr;
+
+    void animateModeLabel();   // pomocnicza metoda do animacji
 
 
 };
