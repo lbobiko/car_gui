@@ -12,7 +12,10 @@ Dashboard::Dashboard(QLabel* engineInfo,
                      QLabel* tripAvgConsInfo,
                      QLabel* tripTimeInfo,
                      QLabel* tripAvgSpeedInfo,
-                     QProgressBar* fuelBar)
+                     QProgressBar* fuelBar,
+                     QLabel* gearInfo,
+                     QLabel* rpmInfo,
+                     QLabel* shiftModeInfo)
     : engineInfo_(engineInfo),
     throttleInfo_(throttleInfo),
     throttleDet_(throttleDetail),
@@ -24,7 +27,10 @@ Dashboard::Dashboard(QLabel* engineInfo,
     tripAvgConsInfo_(tripAvgConsInfo),
     tripTimeInfo_(tripTimeInfo),
     tripAvgSpeedInfo_(tripAvgSpeedInfo),
-    fuelBar_(fuelBar)
+    fuelBar_(fuelBar),
+    gearInfo_(gearInfo),
+    rpmInfo_(rpmInfo),
+    shiftModeInfo_(shiftModeInfo)
 {
     // opcjonalne startowe wartości/formaty
     if (speedInfo_) {
@@ -155,8 +161,14 @@ void Dashboard::refresh(const Car& car) {
                 "QProgressBar::chunk { background-color: #ff0000; }");
         }
     }
+    // ------------Gears------------------
+    gearInfo_->setText(QString("Gear: %1").arg(car.getGear()));
+    rpmInfo_->setText(QString("RPM: %1").arg((int)car.getRpm()));
+    shiftModeInfo_->setText(
+        QString("Mode: %1").arg(car.getShiftMode() == ShiftMode::Auto ? "Auto" : "Manual")
+        );
 
-    // ---------- TripComputer ----------
+        // ---------- TripComputer ----------
     if (tripDistanceInfo_) {
         double dKm = car.getTripDistanceKm();
         tripDistanceInfo_->setText(QString::number(dKm, 'f', 2) + " km");

@@ -8,6 +8,7 @@
 #include "ConsumptionModel.h"
 #include "Constants.h"
 #include "TripComputer.h"
+#include "Transmission.h"
 
 class Car {
 private:
@@ -28,6 +29,10 @@ private:
     TripComputer tripComputer_;
 
     bool fuelWarningShown_ = false;
+
+    Transmission transmission_;
+    double computeRpm() const;
+    double engineTorque(double rpm) const;
 
 public:
     Car();
@@ -65,6 +70,13 @@ public:
 
     bool shouldShowFuelWarning() const;
     void resetFuelWarning();
+    int getGear() const { return transmission_.gear(); }
+    ShiftMode getShiftMode() const { return transmission_.mode(); }
+    double getRpm() const { return computeRpm(); }
+
+    void toggleShiftMode() { transmission_.toggleMode(); }
+    void shiftUp()   { transmission_.shiftUp(); }
+    void shiftDown() { transmission_.shiftDown(); }
 };
 
 #endif

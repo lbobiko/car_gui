@@ -14,5 +14,18 @@ constexpr double C_ROLL     = 150.0;        // opór toczenia w N
 constexpr double C_DRAG     = 0.50;         // opór aerodynamiczny
 constexpr double K_BRAKE    = 4500.0;       // siła hamowania
 
+// koło / napęd
+constexpr double WHEEL_RADIUS_M   = 0.30;   // ~60 cm średnicy
+constexpr double DRIVELINE_EFF    = 0.90;   // sprawność przeniesienia napędu
+
+// RPM
+constexpr double IDLE_RPM         = 900.0;
+constexpr double REDLINE_RPM      = 6500.0;
+
+// moment (bardzo uproszczony)
+constexpr double TORQUE_MAX_NM    = 220.0;  // maks. moment
+constexpr double RPM_TORQUE_PEAK  = 4000.0; // gdzie jest "najlepiej"
+constexpr double RPM_TORQUE_WIDTH = 2500.0; // szerokość krzywej
+
 
 #endif // CONSTANTS_H

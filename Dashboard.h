@@ -22,7 +22,10 @@ public:
               QLabel* tripAvgConsInfo,
               QLabel* tripTimeInfo,
               QLabel* tripAvgSpeedInfo,
-              QProgressBar* fuelBar);
+              QProgressBar* fuelBar,
+              QLabel* gearInfo,
+              QLabel* rpmInfo,
+              QLabel* shiftModeInfo);
 
     void refresh(const Car& car);
 
@@ -34,6 +37,9 @@ private:
     QLabel* speedInfo_     = nullptr;
     QLabel* distanceInfo_  = nullptr;
     QLabel* fuelInfo_      = nullptr;
+    QLabel* gearInfo_      = nullptr;
+    QLabel* rpmInfo_      = nullptr;
+    QLabel* shiftModeInfo_      = nullptr;
 
     QLabel* tripDistanceInfo_ = nullptr;
     QLabel* tripAvgConsInfo_  = nullptr;

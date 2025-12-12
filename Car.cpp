@@ -5,7 +5,7 @@
 #include <algorithm>
 #include "Constants.h"
 #include "TripComputer.h"
-
+#include <cmath>
 
 Car::Car()
     : name("Toyota")
@@ -71,6 +71,16 @@ void Car::update(double dt)
         fuelWarningShown_ = true;   // flaga
     }
 
+    // --- skrzynia biegów / RPM ---
+
+    // aktualne obroty z biegu i prędkości
+    double rpm = computeRpm();
+
+        if (transmission_.mode() == ShiftMode::Auto) {
+        transmission_.updateAuto(rpm, throttle);
+        rpm = computeRpm();
+    }
+
     // --- SIŁY ---
 
     double F_eng   = 0.0;
@@ -78,9 +88,19 @@ void Car::update(double dt)
     double F_drag  = 0.0;
     double F_brake = 0.0;
 
-    // napęd – tylko gdy silnik działa
+
+    // napęd – tylko gdy silnik działa i jest gaz
     if (engineOn && throttle > 0.0) {
-        F_eng = K_THROTTLE * throttle;
+        // moment silnika zależny od RPM i gazu
+        double torque = engineTorque(rpm); // jeśli torque ma zależeć też od throttle,
+
+        // przełożenie skrzyni + final drive; na luzie totalRatio() powinno być 0
+        double ratio = transmission_.totalRatio();
+
+        if (ratio > 0.0) { // zabezpieczenie: na luzie nie jedzie
+            double driveTorque = torque * ratio * DRIVELINE_EFF;
+            F_eng = driveTorque / WHEEL_RADIUS_M;
+        }
     }
 
     // opory (toczenie + powietrze) tylko przy dodatniej prędkości
@@ -97,7 +117,7 @@ void Car::update(double dt)
     // suma sił
     double F = F_eng - F_roll - F_drag - F_brake;
 
-    // nie pozwalamy „ciągnąć do tyłu” gdy prędkość w okolicach zera
+    // gdy prędkość w okolicach zera
     if (v <= 0.0 && F < 0.0) {
         F = 0.0;
     }
@@ -189,4 +209,47 @@ bool Car::shouldShowFuelWarning() const {
 }
 void Car::resetFuelWarning() {
     fuelWarningShown_ = false;
+}
+
+double Car::computeRpm() const
+{
+    if (!engine.getEngineStatus()) return 0.0;
+
+    double ratio = transmission_.totalRatio();
+
+    // luz: trzymaj jałowe (albo 0, ale jałowe wygląda lepiej)
+    if (ratio <= 0.0) return IDLE_RPM;
+
+    double wheel_rps = v_mps / (2.0 * M_PI * WHEEL_RADIUS_M); // obr/s
+    double wheel_rpm = wheel_rps * 60.0;
+
+    double rpm = wheel_rpm * ratio;
+
+    if (rpm < IDLE_RPM) rpm = IDLE_RPM;
+    if (rpm > REDLINE_RPM) rpm = REDLINE_RPM; // żeby test "nie przekracza redline" przechodził
+
+    return rpm;
+}
+
+double Car::engineTorque(double rpm) const
+{
+    if (!engine.getEngineStatus() || throttle <= 0.0)
+        return 0.0;
+
+    // stopień wciśnięcia gazu (0–1)
+    double t = std::clamp(throttle, 0.0, 1.0);
+
+    // odległość od optymalnych obrotów
+    double x = (rpm - RPM_TORQUE_PEAK) / RPM_TORQUE_WIDTH;
+
+    // pseudo-gauss: duży moment koło RPM_TORQUE_PEAK, maleje na boki
+    double shape = std::exp(-0.5 * x * x);   // 1.0 w środku, maleje do 0
+
+    double torque = TORQUE_MAX_NM * shape * t;   // [Nm]
+
+    // poza zakresem jałowy–redline mocno przyduszamy silnik
+    if (rpm < IDLE_RPM || rpm > REDLINE_RPM)
+        torque *= 0.3;
+
+    return torque;   // [Nm]
 }

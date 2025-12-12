@@ -58,6 +58,13 @@ public:
     QLabel *label_6;
     QLabel *modeLabel;
     QProgressBar *fuelBar;
+    QLabel *gearInfo;
+    QLabel *speedText_2;
+    QLabel *rpmInfo;
+    QLabel *shiftModeInfo;
+    QPushButton *btnShiftUp;
+    QPushButton *btnShiftDown;
+    QPushButton *btnToggleShiftMode;
     QMenuBar *menubar;
     QStatusBar *statusbar;
 
@@ -65,24 +72,24 @@ public:
     {
         if (MainWindow->objectName().isEmpty())
             MainWindow->setObjectName("MainWindow");
-        MainWindow->resize(800, 600);
+        MainWindow->resize(800, 662);
         centralwidget = new QWidget(MainWindow);
         centralwidget->setObjectName("centralwidget");
         engineButton = new QPushButton(centralwidget);
         engineButton->setObjectName("engineButton");
-        engineButton->setGeometry(QRect(20, 490, 151, 41));
+        engineButton->setGeometry(QRect(10, 550, 151, 41));
         throttleButton = new QPushButton(centralwidget);
         throttleButton->setObjectName("throttleButton");
-        throttleButton->setGeometry(QRect(590, 490, 151, 41));
+        throttleButton->setGeometry(QRect(590, 550, 151, 41));
         brakeButton = new QPushButton(centralwidget);
         brakeButton->setObjectName("brakeButton");
-        brakeButton->setGeometry(QRect(410, 490, 151, 41));
+        brakeButton->setGeometry(QRect(400, 550, 151, 41));
         speedInfo = new QLabel(centralwidget);
         speedInfo->setObjectName("speedInfo");
-        speedInfo->setGeometry(QRect(230, 280, 111, 41));
+        speedInfo->setGeometry(QRect(220, 190, 111, 41));
         speedText = new QLabel(centralwidget);
         speedText->setObjectName("speedText");
-        speedText->setGeometry(QRect(230, 340, 131, 31));
+        speedText->setGeometry(QRect(220, 250, 61, 31));
         distanceText = new QLabel(centralwidget);
         distanceText->setObjectName("distanceText");
         distanceText->setGeometry(QRect(10, 10, 141, 41));
@@ -91,16 +98,16 @@ public:
         distanceInfo->setGeometry(QRect(160, 10, 111, 41));
         engineInfo = new QLabel(centralwidget);
         engineInfo->setObjectName("engineInfo");
-        engineInfo->setGeometry(QRect(20, 430, 121, 41));
+        engineInfo->setGeometry(QRect(10, 490, 121, 41));
         throttleInfo = new QLabel(centralwidget);
         throttleInfo->setObjectName("throttleInfo");
-        throttleInfo->setGeometry(QRect(590, 390, 151, 41));
+        throttleInfo->setGeometry(QRect(590, 480, 151, 41));
         throttleDetail = new QLabel(centralwidget);
         throttleDetail->setObjectName("throttleDetail");
-        throttleDetail->setGeometry(QRect(590, 430, 151, 41));
+        throttleDetail->setGeometry(QRect(590, 510, 151, 41));
         brakeInfo = new QLabel(centralwidget);
         brakeInfo->setObjectName("brakeInfo");
-        brakeInfo->setGeometry(QRect(410, 430, 151, 41));
+        brakeInfo->setGeometry(QRect(400, 500, 151, 41));
         quitButton = new QPushButton(centralwidget);
         quitButton->setObjectName("quitButton");
         quitButton->setGeometry(QRect(640, 10, 150, 41));
@@ -112,7 +119,7 @@ public:
         fuelInfo->setGeometry(QRect(20, 340, 180, 41));
         refuelButton = new QPushButton(centralwidget);
         refuelButton->setObjectName("refuelButton");
-        refuelButton->setGeometry(QRect(220, 490, 151, 41));
+        refuelButton->setGeometry(QRect(210, 550, 151, 41));
         tableWidget = new QTableWidget(centralwidget);
         tableWidget->setObjectName("tableWidget");
         tableWidget->setGeometry(QRect(540, 120, 256, 241));
@@ -166,6 +173,27 @@ public:
         fuelBar->setGeometry(QRect(20, 310, 118, 23));
         fuelBar->setValue(40);
         fuelBar->setTextVisible(true);
+        gearInfo = new QLabel(centralwidget);
+        gearInfo->setObjectName("gearInfo");
+        gearInfo->setGeometry(QRect(220, 320, 58, 16));
+        speedText_2 = new QLabel(centralwidget);
+        speedText_2->setObjectName("speedText_2");
+        speedText_2->setGeometry(QRect(360, 250, 61, 31));
+        rpmInfo = new QLabel(centralwidget);
+        rpmInfo->setObjectName("rpmInfo");
+        rpmInfo->setGeometry(QRect(360, 200, 101, 16));
+        shiftModeInfo = new QLabel(centralwidget);
+        shiftModeInfo->setObjectName("shiftModeInfo");
+        shiftModeInfo->setGeometry(QRect(350, 320, 151, 16));
+        btnShiftUp = new QPushButton(centralwidget);
+        btnShiftUp->setObjectName("btnShiftUp");
+        btnShiftUp->setGeometry(QRect(639, 400, 121, 32));
+        btnShiftDown = new QPushButton(centralwidget);
+        btnShiftDown->setObjectName("btnShiftDown");
+        btnShiftDown->setGeometry(QRect(639, 430, 121, 32));
+        btnToggleShiftMode = new QPushButton(centralwidget);
+        btnToggleShiftMode->setObjectName("btnToggleShiftMode");
+        btnToggleShiftMode->setGeometry(QRect(639, 370, 121, 32));
         MainWindow->setCentralWidget(centralwidget);
         menubar = new QMenuBar(MainWindow);
         menubar->setObjectName("menubar");
@@ -183,8 +211,20 @@ public:
     void retranslateUi(QMainWindow *MainWindow)
     {
         MainWindow->setWindowTitle(QCoreApplication::translate("MainWindow", "MainWindow", nullptr));
+#if QT_CONFIG(tooltip)
+        MainWindow->setToolTip(QString());
+#endif // QT_CONFIG(tooltip)
+#if QT_CONFIG(tooltip)
+        engineButton->setToolTip(QCoreApplication::translate("MainWindow", "Engine ON or OFF", nullptr));
+#endif // QT_CONFIG(tooltip)
         engineButton->setText(QCoreApplication::translate("MainWindow", "Engine ON/OFF", nullptr));
+#if QT_CONFIG(tooltip)
+        throttleButton->setToolTip(QCoreApplication::translate("MainWindow", "Press throttle", nullptr));
+#endif // QT_CONFIG(tooltip)
         throttleButton->setText(QCoreApplication::translate("MainWindow", "Throttle", nullptr));
+#if QT_CONFIG(tooltip)
+        brakeButton->setToolTip(QCoreApplication::translate("MainWindow", "Press brake", nullptr));
+#endif // QT_CONFIG(tooltip)
         brakeButton->setText(QCoreApplication::translate("MainWindow", "Brake", nullptr));
         speedInfo->setText(QCoreApplication::translate("MainWindow", "speed", nullptr));
         speedText->setText(QCoreApplication::translate("MainWindow", "SPEED", nullptr));
@@ -194,15 +234,27 @@ public:
         throttleInfo->setText(QString());
         throttleDetail->setText(QCoreApplication::translate("MainWindow", "0", nullptr));
         brakeInfo->setText(QString());
+#if QT_CONFIG(tooltip)
+        quitButton->setToolTip(QCoreApplication::translate("MainWindow", "Quit simmulation", nullptr));
+#endif // QT_CONFIG(tooltip)
         quitButton->setText(QCoreApplication::translate("MainWindow", "Quit program", nullptr));
+#if QT_CONFIG(tooltip)
+        helpButton->setToolTip(QCoreApplication::translate("MainWindow", "Show help window", nullptr));
+#endif // QT_CONFIG(tooltip)
         helpButton->setText(QCoreApplication::translate("MainWindow", "Help", nullptr));
         fuelInfo->setText(QCoreApplication::translate("MainWindow", "fuel", nullptr));
+#if QT_CONFIG(tooltip)
+        refuelButton->setToolTip(QCoreApplication::translate("MainWindow", "Add 5L. of fuel", nullptr));
+#endif // QT_CONFIG(tooltip)
         refuelButton->setText(QCoreApplication::translate("MainWindow", "Refuel +5L", nullptr));
         label->setText(QCoreApplication::translate("MainWindow", "Trip computer", nullptr));
         label_2->setText(QCoreApplication::translate("MainWindow", "Distance", nullptr));
         label_3->setText(QCoreApplication::translate("MainWindow", "Avg. cons.", nullptr));
         label_4->setText(QCoreApplication::translate("MainWindow", "Time", nullptr));
         label_5->setText(QCoreApplication::translate("MainWindow", "Avg. speed", nullptr));
+#if QT_CONFIG(tooltip)
+        resetTripButton->setToolTip(QCoreApplication::translate("MainWindow", "Reset current trip", nullptr));
+#endif // QT_CONFIG(tooltip)
         resetTripButton->setText(QCoreApplication::translate("MainWindow", "Reset trip", nullptr));
         tripTimeInfo->setText(QCoreApplication::translate("MainWindow", "time", nullptr));
         tripDistanceInfo->setText(QCoreApplication::translate("MainWindow", "dist", nullptr));
@@ -214,6 +266,22 @@ public:
 
         label_6->setText(QCoreApplication::translate("MainWindow", "Mode change:", nullptr));
         modeLabel->setText(QCoreApplication::translate("MainWindow", "Mode: normal", nullptr));
+        gearInfo->setText(QCoreApplication::translate("MainWindow", "Gear", nullptr));
+        speedText_2->setText(QCoreApplication::translate("MainWindow", "RPM", nullptr));
+        rpmInfo->setText(QCoreApplication::translate("MainWindow", "rpm", nullptr));
+        shiftModeInfo->setText(QCoreApplication::translate("MainWindow", "shift", nullptr));
+#if QT_CONFIG(tooltip)
+        btnShiftUp->setToolTip(QCoreApplication::translate("MainWindow", "Shift up (Manual)", nullptr));
+#endif // QT_CONFIG(tooltip)
+        btnShiftUp->setText(QCoreApplication::translate("MainWindow", "Gear +", nullptr));
+#if QT_CONFIG(tooltip)
+        btnShiftDown->setToolTip(QCoreApplication::translate("MainWindow", "Shift down (Manual)", nullptr));
+#endif // QT_CONFIG(tooltip)
+        btnShiftDown->setText(QCoreApplication::translate("MainWindow", "Gear -", nullptr));
+#if QT_CONFIG(tooltip)
+        btnToggleShiftMode->setToolTip(QCoreApplication::translate("MainWindow", "Toggle shift mode", nullptr));
+#endif // QT_CONFIG(tooltip)
+        btnToggleShiftMode->setText(QCoreApplication::translate("MainWindow", "Auto/Manual", nullptr));
     } // retranslateUi
 
 };

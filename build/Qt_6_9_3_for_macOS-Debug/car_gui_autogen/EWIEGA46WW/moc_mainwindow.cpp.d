@@ -940,4 +940,5 @@
   /Users/lukebobinski/qtrepos/car_gui/Dashboard.h \
   /Users/lukebobinski/qtrepos/car_gui/Engine.h \
   /Users/lukebobinski/qtrepos/car_gui/FuelTank.h \
+  /Users/lukebobinski/qtrepos/car_gui/Transmission.h \
   /Users/lukebobinski/qtrepos/car_gui/TripComputer.h

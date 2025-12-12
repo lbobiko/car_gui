@@ -62,7 +62,11 @@ MainWindow::MainWindow(QWidget *parent)
         ui->tripAvgConsInfo,
         ui->tripTimeInfo,
         ui->tripAvgSpeedInfo,
-        ui->fuelBar
+        ui->fuelBar,
+        ui->gearInfo,
+        ui->rpmInfo,
+        ui->shiftModeInfo
+
         );
 
     // pierwsze odświeżenie, żeby UI nie było puste
@@ -70,6 +74,33 @@ MainWindow::MainWindow(QWidget *parent)
 
     // żeby okno łapało klawisze
     this->setFocusPolicy(Qt::StrongFocus);
+
+    // --- Skrzynia biegów: GUI ---
+
+    // Zmiana trybu Auto / Manual
+    connect(ui->btnToggleShiftMode, &QPushButton::clicked, this, [this]() {
+        car.toggleShiftMode();
+        dashboard->refresh(car);
+        ui->btnToggleShiftMode->setText(
+            car.getShiftMode() == ShiftMode::Auto ? "Switch to Manual" : "Switch to Auto"
+            );
+    });
+
+    // Bieg w górę (tylko Manual)
+    connect(ui->btnShiftUp, &QPushButton::clicked, this, [this]() {
+        if (car.getShiftMode() == ShiftMode::Manual) {
+            car.shiftUp();
+            dashboard->refresh(car);
+        }
+    });
+
+    // Bieg w dół (tylko Manual)
+    connect(ui->btnShiftDown, &QPushButton::clicked, this, [this]() {
+        if (car.getShiftMode() == ShiftMode::Manual) {
+            car.shiftDown();
+            dashboard->refresh(car);
+        }
+    });
 
     // przycisk Refuel
     connect(ui->refuelButton, &QPushButton::clicked,
@@ -116,6 +147,30 @@ MainWindow::MainWindow(QWidget *parent)
     });
 
     connect(ui->quitButton, &QPushButton::clicked, this, &MainWindow::quitButtonClicked);
+
+    // M: Auto/Manual
+    auto scToggleShift = new QShortcut(QKeySequence(Qt::Key_M), this);
+    scToggleShift->setContext(Qt::ApplicationShortcut);
+    connect(scToggleShift, &QShortcut::activated, this, [this]{
+        car.toggleShiftMode();
+        dashboard->refresh(car);
+    });
+
+    // A: bieg w górę (tylko manual)
+    auto scUpGear = new QShortcut(QKeySequence(Qt::Key_A), this);
+    scUpGear->setContext(Qt::ApplicationShortcut);
+    connect(scUpGear, &QShortcut::activated, this, [this]{
+        if (car.getShiftMode() == ShiftMode::Manual) car.shiftUp();
+        dashboard->refresh(car);
+    });
+
+    // Z: bieg w dół (tylko manual)
+    auto scDownGear = new QShortcut(QKeySequence(Qt::Key_Z), this);
+    scDownGear->setContext(Qt::ApplicationShortcut);
+    connect(scDownGear, &QShortcut::activated, this, [this]{
+        if (car.getShiftMode() == ShiftMode::Manual) car.shiftDown();
+        dashboard->refresh(car);
+    });
 
     // Skróty zmiany trybu jazdy
     auto scModeEco    = new QShortcut(QKeySequence(Qt::Key_1), this);
@@ -259,58 +314,6 @@ void MainWindow::quitButtonClicked(){
     QApplication::quit();
 }
 
-/*void MainWindow::showHelpDialog()
-{
-    // okno dialogowe
-    QDialog helpDialog(this);
-    helpDialog.setWindowTitle("Pomoc – Sterowanie Symulatorem");
-    helpDialog.setModal(true);
-    helpDialog.resize(400, 320);
-    helpDialog.setStyleSheet(
-        "background-color: #111;"
-        "color: #eee;"
-        "font-family: 'Courier New';"
-        "font-size: 14px;"
-        "border: 2px solid #0f0;"
-        );
-
-    //  etykieta  HTML
-    QLabel *info = new QLabel(&helpDialog);
-    info->setText(
-        "<h3 style='color:#0f0;'>🧭 Sterowanie symulatorem</h3>"
-        "<p>"
-        "🟢 <b>E</b> – Uruchom / wyłącz silnik<br>"
-        "🔼 <b>Strzałka w górę</b> – Dodaj gazu<br>"
-        "🔽 <b>Strzałka w dół</b> – Odejmij gazu<br>"
-        "⎵ <b>Spacja</b> – Hamulec<br>"
-        "⛽ <b>R</b> – Tankowanie +5 L<br>"
-        "⏻ <b>Q</b> – Zakończ program<br>"
-        "❓ <b>F1</b> – Pokaż pomoc"
-        "</p>"
-        "<hr>"
-        "<p style='color:#ccc;'>Wskazówka: Możesz używać myszki lub klawiatury.<br>"
-        "Symulator aktualizuje stan co 20 ms (DT = 0.02 s).</p>"
-        );
-    info->setWordWrap(true);
-    info->setAlignment(Qt::AlignLeft | Qt::AlignTop);
-
-    // Przycisk zamknięcia
-    QPushButton *closeBtn = new QPushButton("Zamknij", &helpDialog);
-    closeBtn->setStyleSheet(
-        "QPushButton { background-color: #0f0; color: black; font-weight: bold; "
-        "padding: 6px 12px; border-radius: 6px; }"
-        "QPushButton:hover { background-color: #1f1; }"
-        );
-    connect(closeBtn, &QPushButton::clicked, &helpDialog, &QDialog::accept);
-
-    // Układ
-    QVBoxLayout *layout = new QVBoxLayout(&helpDialog);
-    layout->addWidget(info);
-    layout->addWidget(closeBtn, 0, Qt::AlignCenter);
-
-    helpDialog.setLayout(layout);
-    helpDialog.exec();
-}*/
 
 void MainWindow::showHelpDialog()
 {
@@ -333,19 +336,29 @@ void MainWindow::showHelpDialog()
         "🟢 <b>E</b> – Uruchom / wyłącz silnik<br>"
         "🔼 <b>Strzałka w górę</b> – Gaz 100%<br>"
         "🔽 <b>Strzałka w dół</b> – Gaz 0%<br>"
-        "⎵ <b>Spacja</b> – Hamowanie (działa tylko trzymane)<br>"
+        "⎵ <b>Spacja</b> – Hamowanie (działa tylko gdy trzymasz)<br>"
         "🔄 <b>R</b> – Tankowanie +5 L<br>"
         "<br>"
-        "⚙️ <b>Zmiana trybu spalania</b>:<br>"
+
+        "🕹️ <b>Skrzynia biegów</b>:<br>"
+        "🔁 <b>M</b> – Przełącz tryb: <b>Auto</b> / <b>Manual</b><br>"
+        "⬆️ <b>A</b> – Bieg w górę (tylko w Manual)<br>"
+        "⬇️ <b>Z</b> – Bieg w dół (tylko w Manual)<br>"
+        "<span style='color:#ccc;'>Uwaga: na luzie (Gear 0) auto nie przyspiesza.</span><br>"
+        "<br>"
+
+        "⚙️ <b>Tryb spalania</b>:<br>"
         "&nbsp;&nbsp;&nbsp;① <b>1</b> – Eco<br>"
         "&nbsp;&nbsp;&nbsp;② <b>2</b> – Normal<br>"
         "&nbsp;&nbsp;&nbsp;③ <b>3</b> – Sport<br>"
         "<br>"
+
         "⛽ <b>Pasek paliwa</b>: kolor zmienia się przy niskim poziomie<br>"
-        "&nbsp;&nbsp;&nbsp;• zielony – >20%<br>"
+        "&nbsp;&nbsp;&nbsp;• zielony – &gt;20%<br>"
         "&nbsp;&nbsp;&nbsp;• pomarańczowy – 10–20%<br>"
-        "&nbsp;&nbsp;&nbsp;• czerwony – <10%<br>"
+        "&nbsp;&nbsp;&nbsp;• czerwony – &lt;10%<br>"
         "<br>"
+
         "📊 <b>Trip Computer</b> mierzy:<br>"
         "&nbsp;&nbsp;&nbsp;• czas jazdy<br>"
         "&nbsp;&nbsp;&nbsp;• dystans<br>"
