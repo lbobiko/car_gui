@@ -11,7 +11,9 @@
 
 #include <QtCore/QVariant>
 #include <QtWidgets/QApplication>
+#include <QtWidgets/QCheckBox>
 #include <QtWidgets/QComboBox>
+#include <QtWidgets/QFrame>
 #include <QtWidgets/QHeaderView>
 #include <QtWidgets/QLabel>
 #include <QtWidgets/QMainWindow>
@@ -65,6 +67,12 @@ public:
     QPushButton *btnShiftUp;
     QPushButton *btnShiftDown;
     QPushButton *btnToggleShiftMode;
+    QFrame *frame;
+    QComboBox *surfaceCombo;
+    QCheckBox *absCheckBox;
+    QCheckBox *tcsCheckBox;
+    QLabel *absStatusInfo;
+    QLabel *tcsStatusInfo;
     QMenuBar *menubar;
     QStatusBar *statusbar;
 
@@ -194,6 +202,28 @@ public:
         btnToggleShiftMode = new QPushButton(centralwidget);
         btnToggleShiftMode->setObjectName("btnToggleShiftMode");
         btnToggleShiftMode->setGeometry(QRect(639, 370, 121, 32));
+        frame = new QFrame(centralwidget);
+        frame->setObjectName("frame");
+        frame->setGeometry(QRect(320, 370, 291, 91));
+        frame->setFrameShape(QFrame::Shape::StyledPanel);
+        frame->setFrameShadow(QFrame::Shadow::Raised);
+        surfaceCombo = new QComboBox(frame);
+        surfaceCombo->setObjectName("surfaceCombo");
+        surfaceCombo->setGeometry(QRect(120, 50, 141, 32));
+        absCheckBox = new QCheckBox(frame);
+        absCheckBox->setObjectName("absCheckBox");
+        absCheckBox->setGeometry(QRect(100, 10, 85, 20));
+        absCheckBox->setChecked(true);
+        tcsCheckBox = new QCheckBox(frame);
+        tcsCheckBox->setObjectName("tcsCheckBox");
+        tcsCheckBox->setGeometry(QRect(200, 10, 85, 20));
+        tcsCheckBox->setChecked(true);
+        absStatusInfo = new QLabel(frame);
+        absStatusInfo->setObjectName("absStatusInfo");
+        absStatusInfo->setGeometry(QRect(10, 10, 81, 31));
+        tcsStatusInfo = new QLabel(frame);
+        tcsStatusInfo->setObjectName("tcsStatusInfo");
+        tcsStatusInfo->setGeometry(QRect(10, 60, 91, 21));
         MainWindow->setCentralWidget(centralwidget);
         menubar = new QMenuBar(MainWindow);
         menubar->setObjectName("menubar");
@@ -282,6 +312,19 @@ public:
         btnToggleShiftMode->setToolTip(QCoreApplication::translate("MainWindow", "Toggle shift mode", nullptr));
 #endif // QT_CONFIG(tooltip)
         btnToggleShiftMode->setText(QCoreApplication::translate("MainWindow", "Auto/Manual", nullptr));
+#if QT_CONFIG(tooltip)
+        surfaceCombo->setToolTip(QCoreApplication::translate("MainWindow", "Pick a suface for simmulation.", nullptr));
+#endif // QT_CONFIG(tooltip)
+#if QT_CONFIG(tooltip)
+        absCheckBox->setToolTip(QCoreApplication::translate("MainWindow", "Enable/Disable ABS", nullptr));
+#endif // QT_CONFIG(tooltip)
+        absCheckBox->setText(QCoreApplication::translate("MainWindow", "ABS", nullptr));
+#if QT_CONFIG(tooltip)
+        tcsCheckBox->setToolTip(QCoreApplication::translate("MainWindow", "Enable/Disable TCS", nullptr));
+#endif // QT_CONFIG(tooltip)
+        tcsCheckBox->setText(QCoreApplication::translate("MainWindow", "TCS", nullptr));
+        absStatusInfo->setText(QCoreApplication::translate("MainWindow", "ABS check", nullptr));
+        tcsStatusInfo->setText(QCoreApplication::translate("MainWindow", "TCS check", nullptr));
     } // retranslateUi
 
 };

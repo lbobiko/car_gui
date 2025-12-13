@@ -742,6 +742,7 @@
   /Users/lukebobinski/Qt/6.9.3/macos/lib/QtCore.framework/Versions/A/Headers/q23utility.h \
   /Users/lukebobinski/Qt/6.9.3/macos/lib/QtCore.framework/Versions/A/Headers/qabstractanimation.h \
   /Users/lukebobinski/Qt/6.9.3/macos/lib/QtCore.framework/Versions/A/Headers/qabstracteventdispatcher.h \
+  /Users/lukebobinski/Qt/6.9.3/macos/lib/QtCore.framework/Versions/A/Headers/qabstractitemmodel.h \
   /Users/lukebobinski/Qt/6.9.3/macos/lib/QtCore.framework/Versions/A/Headers/qalgorithms.h \
   /Users/lukebobinski/Qt/6.9.3/macos/lib/QtCore.framework/Versions/A/Headers/qanystringview.h \
   /Users/lukebobinski/Qt/6.9.3/macos/lib/QtCore.framework/Versions/A/Headers/qarraydata.h \
@@ -820,6 +821,7 @@
   /Users/lukebobinski/Qt/6.9.3/macos/lib/QtCore.framework/Versions/A/Headers/qpropertyanimation.h \
   /Users/lukebobinski/Qt/6.9.3/macos/lib/QtCore.framework/Versions/A/Headers/qrect.h \
   /Users/lukebobinski/Qt/6.9.3/macos/lib/QtCore.framework/Versions/A/Headers/qrefcount.h \
+  /Users/lukebobinski/Qt/6.9.3/macos/lib/QtCore.framework/Versions/A/Headers/qregularexpression.h \
   /Users/lukebobinski/Qt/6.9.3/macos/lib/QtCore.framework/Versions/A/Headers/qscopedpointer.h \
   /Users/lukebobinski/Qt/6.9.3/macos/lib/QtCore.framework/Versions/A/Headers/qscopeguard.h \
   /Users/lukebobinski/Qt/6.9.3/macos/lib/QtCore.framework/Versions/A/Headers/qset.h \
@@ -914,20 +916,36 @@
   /Users/lukebobinski/Qt/6.9.3/macos/lib/QtGui.framework/Versions/A/Headers/qtguiexports.h \
   /Users/lukebobinski/Qt/6.9.3/macos/lib/QtGui.framework/Versions/A/Headers/qtguiglobal.h \
   /Users/lukebobinski/Qt/6.9.3/macos/lib/QtGui.framework/Versions/A/Headers/qtransform.h \
+  /Users/lukebobinski/Qt/6.9.3/macos/lib/QtGui.framework/Versions/A/Headers/qvalidator.h \
   /Users/lukebobinski/Qt/6.9.3/macos/lib/QtGui.framework/Versions/A/Headers/qvector2d.h \
   /Users/lukebobinski/Qt/6.9.3/macos/lib/QtGui.framework/Versions/A/Headers/qvectornd.h \
   /Users/lukebobinski/Qt/6.9.3/macos/lib/QtGui.framework/Versions/A/Headers/qwindowdefs.h \
+  /Users/lukebobinski/Qt/6.9.3/macos/lib/QtWidgets.framework/Versions/A/Headers/QCheckBox \
+  /Users/lukebobinski/Qt/6.9.3/macos/lib/QtWidgets.framework/Versions/A/Headers/QComboBox \
   /Users/lukebobinski/Qt/6.9.3/macos/lib/QtWidgets.framework/Versions/A/Headers/QGraphicsOpacityEffect \
   /Users/lukebobinski/Qt/6.9.3/macos/lib/QtWidgets.framework/Versions/A/Headers/QLabel \
   /Users/lukebobinski/Qt/6.9.3/macos/lib/QtWidgets.framework/Versions/A/Headers/QMainWindow \
   /Users/lukebobinski/Qt/6.9.3/macos/lib/QtWidgets.framework/Versions/A/Headers/QProgressBar \
+  /Users/lukebobinski/Qt/6.9.3/macos/lib/QtWidgets.framework/Versions/A/Headers/QPushButton \
   /Users/lukebobinski/Qt/6.9.3/macos/lib/QtWidgets.framework/Versions/A/Headers/QWidget \
+  /Users/lukebobinski/Qt/6.9.3/macos/lib/QtWidgets.framework/Versions/A/Headers/qabstractbutton.h \
+  /Users/lukebobinski/Qt/6.9.3/macos/lib/QtWidgets.framework/Versions/A/Headers/qabstractitemdelegate.h \
+  /Users/lukebobinski/Qt/6.9.3/macos/lib/QtWidgets.framework/Versions/A/Headers/qabstractslider.h \
+  /Users/lukebobinski/Qt/6.9.3/macos/lib/QtWidgets.framework/Versions/A/Headers/qabstractspinbox.h \
+  /Users/lukebobinski/Qt/6.9.3/macos/lib/QtWidgets.framework/Versions/A/Headers/qcheckbox.h \
+  /Users/lukebobinski/Qt/6.9.3/macos/lib/QtWidgets.framework/Versions/A/Headers/qcombobox.h \
   /Users/lukebobinski/Qt/6.9.3/macos/lib/QtWidgets.framework/Versions/A/Headers/qframe.h \
   /Users/lukebobinski/Qt/6.9.3/macos/lib/QtWidgets.framework/Versions/A/Headers/qgraphicseffect.h \
   /Users/lukebobinski/Qt/6.9.3/macos/lib/QtWidgets.framework/Versions/A/Headers/qlabel.h \
   /Users/lukebobinski/Qt/6.9.3/macos/lib/QtWidgets.framework/Versions/A/Headers/qmainwindow.h \
   /Users/lukebobinski/Qt/6.9.3/macos/lib/QtWidgets.framework/Versions/A/Headers/qprogressbar.h \
+  /Users/lukebobinski/Qt/6.9.3/macos/lib/QtWidgets.framework/Versions/A/Headers/qpushbutton.h \
+  /Users/lukebobinski/Qt/6.9.3/macos/lib/QtWidgets.framework/Versions/A/Headers/qrubberband.h \
   /Users/lukebobinski/Qt/6.9.3/macos/lib/QtWidgets.framework/Versions/A/Headers/qsizepolicy.h \
+  /Users/lukebobinski/Qt/6.9.3/macos/lib/QtWidgets.framework/Versions/A/Headers/qslider.h \
+  /Users/lukebobinski/Qt/6.9.3/macos/lib/QtWidgets.framework/Versions/A/Headers/qstyle.h \
+  /Users/lukebobinski/Qt/6.9.3/macos/lib/QtWidgets.framework/Versions/A/Headers/qstyleoption.h \
+  /Users/lukebobinski/Qt/6.9.3/macos/lib/QtWidgets.framework/Versions/A/Headers/qtabbar.h \
   /Users/lukebobinski/Qt/6.9.3/macos/lib/QtWidgets.framework/Versions/A/Headers/qtabwidget.h \
   /Users/lukebobinski/Qt/6.9.3/macos/lib/QtWidgets.framework/Versions/A/Headers/qtwidgets-config.h \
   /Users/lukebobinski/Qt/6.9.3/macos/lib/QtWidgets.framework/Versions/A/Headers/qtwidgetsexports.h \

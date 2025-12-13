@@ -6,6 +6,9 @@
 #include <QString>
 #include <QLabel>
 #include <QProgressBar>
+#include <QPushButton>
+#include <QCheckBox>
+#include <QComboBox>
 
 class Car; // forward
 
@@ -25,7 +28,12 @@ public:
               QProgressBar* fuelBar,
               QLabel* gearInfo,
               QLabel* rpmInfo,
-              QLabel* shiftModeInfo);
+              QLabel* shiftModeInfo,
+              QCheckBox* absCheck,
+              QCheckBox* tcsCheck,
+              QComboBox* surfaceCombo,
+              QLabel* absStatusInfo,
+              QLabel* tcsStatusInfo);
 
     void refresh(const Car& car);
 
@@ -47,6 +55,12 @@ private:
     QLabel* tripAvgSpeedInfo_ = nullptr;
 
     QProgressBar* fuelBar_   = nullptr;
+
+    QCheckBox* absCheck_ = nullptr;
+    QCheckBox* tcsCheck_ = nullptr;
+    QComboBox* surfaceCombo_ = nullptr;
+    QLabel* absStatusInfo_ = nullptr;
+    QLabel* tcsStatusInfo_ = nullptr;
 
     void setStatus(QLabel* lbl, const QString& text, const QString& color);
 };

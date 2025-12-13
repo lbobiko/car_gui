@@ -15,7 +15,12 @@ Dashboard::Dashboard(QLabel* engineInfo,
                      QProgressBar* fuelBar,
                      QLabel* gearInfo,
                      QLabel* rpmInfo,
-                     QLabel* shiftModeInfo)
+                     QLabel* shiftModeInfo,
+                     QCheckBox* absCheck,
+                     QCheckBox* tcsCheck,
+                     QComboBox* surfaceCombo,
+                     QLabel* absStatusInfo,
+                     QLabel* tcsStatusInfo)
     : engineInfo_(engineInfo),
     throttleInfo_(throttleInfo),
     throttleDet_(throttleDetail),
@@ -30,7 +35,12 @@ Dashboard::Dashboard(QLabel* engineInfo,
     fuelBar_(fuelBar),
     gearInfo_(gearInfo),
     rpmInfo_(rpmInfo),
-    shiftModeInfo_(shiftModeInfo)
+    shiftModeInfo_(shiftModeInfo),
+    absCheck_(absCheck),
+    tcsCheck_(tcsCheck),
+    surfaceCombo_(surfaceCombo),
+    absStatusInfo_(absStatusInfo),
+    tcsStatusInfo_(tcsStatusInfo)
 {
     // opcjonalne startowe wartości/formaty
     if (speedInfo_) {
@@ -40,6 +50,13 @@ Dashboard::Dashboard(QLabel* engineInfo,
         fuelBar_->setRange(0, 100);
         fuelBar_->setValue(0);
         fuelBar_->setTextVisible(false);
+    }
+
+    if (surfaceCombo_) {
+        surfaceCombo_->clear();
+        surfaceCombo_->addItem("Dry",  0);
+        surfaceCombo_->addItem("Wet",  1);
+        surfaceCombo_->addItem("Ice",  2);
     }
 }
 
@@ -196,4 +213,19 @@ void Dashboard::refresh(const Car& car) {
             tripTimeInfo_->setText(QString::number(minutes, 'f', 1) + " min");
         }
     }
+    // Etap 5
+
+
+    if (absStatusInfo_) {
+        if (car.absActive()) setStatus(absStatusInfo_, "ABS ACTIVE", "orange");
+        else                 setStatus(absStatusInfo_, "ABS", "gray");
+    }
+
+    if (tcsStatusInfo_) {
+        if (car.tcsActive()) setStatus(tcsStatusInfo_, "TCS ACTIVE", "orange");
+        else                 setStatus(tcsStatusInfo_, "TCS", "gray");
+    }
+
+
+
 }

@@ -63,6 +63,17 @@ void Car::update(double dt)
     bool engineOn = engine.getEngineStatus();
     bool noFuel   = fuelTank_.isEmpty();
 
+    // jeśli hamujesz, odpuść gaz
+    if (brake.getBrakePressed()) {
+        throttle = 0.0;
+    }
+
+    // etap 5
+    absActive_ = false;
+    tcsActive_ = false;
+    double mu = surfaceMu();
+    double F_max = mu * MASS_KG * 9.81;   // maksymalna siła “na styku opona–droga”
+
     // jeśli nie ma paliwa, silnik gaśnie i gaz ignorowany
     if (noFuel && engineOn) {
         engine.setEngineStatus(false);
@@ -103,6 +114,15 @@ void Car::update(double dt)
         }
     }
 
+
+    if (tcsEnabled_ && v > MIN_SPEED_FOR_SLIP && F_eng > F_max) {
+        tcsActive_ = true;
+        // ogranicza napęd do przyczepności
+        F_eng = F_max * TCS_REDUCE_FACTOR;   // np. 0.6
+        // albo “idealnie”:
+        // F_eng = F_max;
+    }
+
     // opory (toczenie + powietrze) tylko przy dodatniej prędkości
     if (v > 0.0) {
         F_roll = C_ROLL;
@@ -111,7 +131,30 @@ void Car::update(double dt)
 
     // hamulec
     if (brake.getBrakePressed()) {
-        F_brake = K_BRAKE;
+        double desiredBrake = K_BRAKE;
+
+        if (desiredBrake > F_max && v > 0.5) {
+
+            if (absEnabled_) {
+                absActive_ = true;
+
+                absTime_ += dt;
+                double period = 1.0 / ABS_PULSE_HZ;
+                bool release = std::fmod(absTime_, period) < (0.5 * period);
+
+                desiredBrake = F_max * (release ? ABS_RELEASE_FACTOR : 1.0);
+            } else {
+                // bez ABS: “blokada kół” → gorsze hamowanie niż F_max
+                desiredBrake = F_max * 0.60; // np. 60% przyczepności
+            }
+
+        } else {
+            // hamowanie w granicach przyczepności
+            desiredBrake = std::min(desiredBrake, F_max);
+            absTime_ = 0.0; // opcjonalnie
+        }
+
+        F_brake = desiredBrake;
     }
 
     // suma sił
@@ -253,3 +296,16 @@ double Car::engineTorque(double rpm) const
 
     return torque;   // [Nm]
 }
+
+double Car::surfaceMu() const
+{
+    switch (surface_) {
+    case Surface::Dry: return 0.95;
+    case Surface::Wet: return 0.60;
+    case Surface::Ice: return 0.15;
+    }
+    return 0.8;
+}
+
+bool Car::absEnabled() const { return absEnabled_; }
+bool Car::tcsEnabled() const { return tcsEnabled_; }

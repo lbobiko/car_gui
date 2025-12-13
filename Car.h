@@ -1,6 +1,5 @@
 #ifndef CAR_H
 #define CAR_H
-
 #include <string>
 #include "Brake.h"
 #include "Engine.h"
@@ -9,6 +8,10 @@
 #include "Constants.h"
 #include "TripComputer.h"
 #include "Transmission.h"
+
+enum class Surface {
+    Dry, Wet, Ice
+};
 
 class Car {
 private:
@@ -33,6 +36,14 @@ private:
     Transmission transmission_;
     double computeRpm() const;
     double engineTorque(double rpm) const;
+    // Etap 5
+    bool absEnabled_ = false;
+    bool tcsEnabled_ = false;
+    bool absActive_ = false;  // flaga
+    bool tcsActive_ = false;
+    double surfaceMu() const;
+    double absTime_ = 0.0;   // czas do pulsowania ABS
+    Surface surface_ = Surface::Dry;
 
 public:
     Car();
@@ -73,10 +84,20 @@ public:
     int getGear() const { return transmission_.gear(); }
     ShiftMode getShiftMode() const { return transmission_.mode(); }
     double getRpm() const { return computeRpm(); }
-
+    // Etap 4
     void toggleShiftMode() { transmission_.toggleMode(); }
     void shiftUp()   { transmission_.shiftUp(); }
     void shiftDown() { transmission_.shiftDown(); }
+    // Etap 5
+    void setAbsEnabled(bool on) { absEnabled_ = on; }
+    void setTcsEnabled(bool on) { tcsEnabled_ = on; }
+    void setSurface(Surface s)  { surface_ = s; }
+
+    bool absActive() const { return absActive_; }
+    bool tcsActive() const { return tcsActive_; }
+    bool absEnabled() const;
+    bool tcsEnabled() const;
+    Surface surface() const { return surface_; }
 };
 
 #endif

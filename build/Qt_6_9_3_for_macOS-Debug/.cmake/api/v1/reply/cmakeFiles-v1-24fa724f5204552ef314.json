@@ -6,7 +6,7 @@
 		},
 		{
 			"isGenerated" : true,
-			"path" : "build/Qt_6_9_3_for_macOS-Release/.qtc/package-manager/auto-setup.cmake"
+			"path" : "build/Qt_6_9_3_for_macOS-Debug/.qtc/package-manager/auto-setup.cmake"
 		},
 		{
 			"isCMake" : true,
@@ -20,7 +20,7 @@
 		},
 		{
 			"isGenerated" : true,
-			"path" : "build/Qt_6_9_3_for_macOS-Release/CMakeFiles/3.30.5/CMakeSystem.cmake"
+			"path" : "build/Qt_6_9_3_for_macOS-Debug/CMakeFiles/3.30.5/CMakeSystem.cmake"
 		},
 		{
 			"isCMake" : true,
@@ -29,7 +29,7 @@
 		},
 		{
 			"isGenerated" : true,
-			"path" : "build/Qt_6_9_3_for_macOS-Release/.qtc/package-manager/maintenance_tool_provider.cmake"
+			"path" : "build/Qt_6_9_3_for_macOS-Debug/.qtc/package-manager/maintenance_tool_provider.cmake"
 		},
 		{
 			"isCMake" : true,
@@ -288,7 +288,7 @@
 		},
 		{
 			"isGenerated" : true,
-			"path" : "build/Qt_6_9_3_for_macOS-Release/CMakeFiles/3.30.5/CMakeCXXCompiler.cmake"
+			"path" : "build/Qt_6_9_3_for_macOS-Debug/CMakeFiles/3.30.5/CMakeCXXCompiler.cmake"
 		},
 		{
 			"isCMake" : true,
@@ -432,7 +432,7 @@
 		},
 		{
 			"isGenerated" : true,
-			"path" : "build/Qt_6_9_3_for_macOS-Release/CMakeFiles/3.30.5/CMakeCXXCompiler.cmake"
+			"path" : "build/Qt_6_9_3_for_macOS-Debug/CMakeFiles/3.30.5/CMakeCXXCompiler.cmake"
 		},
 		{
 			"isExternal" : true,
@@ -1892,13 +1892,13 @@
 		},
 		{
 			"isGenerated" : true,
-			"path" : "build/Qt_6_9_3_for_macOS-Release/.qt/info_plist/car_gui/Info.plist"
+			"path" : "build/Qt_6_9_3_for_macOS-Debug/.qt/info_plist/car_gui/Info.plist"
 		}
 	],
 	"kind" : "cmakeFiles",
 	"paths" : 
 	{
-		"build" : "/Users/lukebobinski/qtrepos/car_gui/build/Qt_6_9_3_for_macOS-Release",
+		"build" : "/Users/lukebobinski/qtrepos/car_gui/build/Qt_6_9_3_for_macOS-Debug",
 		"source" : "/Users/lukebobinski/qtrepos/car_gui"
 	},
 	"version" : 

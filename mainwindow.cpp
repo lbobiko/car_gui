@@ -12,6 +12,8 @@
 #include "Dashboard.h"
 #include <QVBoxLayout>
 #include "ConsumptionModel.h"
+#include <QCheckBox>
+#include <QComboBox>
 
 MainWindow::MainWindow(QWidget *parent)
     : QMainWindow(parent)
@@ -65,15 +67,44 @@ MainWindow::MainWindow(QWidget *parent)
         ui->fuelBar,
         ui->gearInfo,
         ui->rpmInfo,
-        ui->shiftModeInfo
+        ui->shiftModeInfo,
+        ui->absCheckBox,
+        ui->tcsCheckBox,
+        ui->surfaceCombo,
+        ui->absStatusInfo,
+        ui->tcsStatusInfo
 
         );
+
+
+    ui->absCheckBox->setChecked(true);
+    ui->tcsCheckBox->setChecked(true);
+    ui->surfaceCombo->setCurrentIndex(0); // Dry
 
     // pierwsze odświeżenie, żeby UI nie było puste
     dashboard->refresh(car);
 
     // żeby okno łapało klawisze
     this->setFocusPolicy(Qt::StrongFocus);
+
+    // ABS
+    connect(ui->absCheckBox, &QCheckBox::toggled, this, [this](bool on){
+        car.setAbsEnabled(on);
+    });
+
+    connect(ui->tcsCheckBox, &QCheckBox::toggled, this, [this](bool on){
+        car.setTcsEnabled(on);
+    });
+
+    connect(ui->surfaceCombo, QOverload<int>::of(&QComboBox::currentIndexChanged),
+            this, [this](int idx){
+                car.setSurface(static_cast<Surface>(idx));
+            });
+    car.setAbsEnabled(ui->absCheckBox->isChecked());
+    car.setTcsEnabled(ui->tcsCheckBox->isChecked());
+    car.setSurface(static_cast<Surface>(ui->surfaceCombo->currentIndex()));
+
+
 
     // --- Skrzynia biegów: GUI ---
 
