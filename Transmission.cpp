@@ -30,6 +30,7 @@ void Transmission::shiftDown() {
     if (gear_ > 0) gear_--;
 }
 
+
 void Transmission::updateAuto(double rpm, double throttle)
 {
     if (mode_ != ShiftMode::Auto) return;
@@ -40,29 +41,22 @@ void Transmission::updateAuto(double rpm, double throttle)
         return;
     }
 
-    // Bazowe progi
-    double up   = upRpm_;
-    double down = downRpm_;
+    // --- PŁYNNE PROGI ZALEŻNE OD GAZU ---
+    throttle = std::clamp(throttle, 0.0, 1.0);
 
-    // Gaz wpływa na zmianę
-    if (throttle > 0.7) { up += 600; down += 200; }
-    if (throttle < 0.2) { up -= 600; down -= 150; }
+    const double upRpm   = 4200.0 + throttle * 1200.0;
+    const double downRpm = 1400.0 + throttle * 400.0;
 
-    // Zabezpieczenie żeby down zawsze było sensownie niżej niż up
-    if (down > up - 500) down = up - 500;
-
-    // Upshift: tylko jeśli nie jesteśmy na najwyższym
-    if (rpm > up && gear_ < maxGear()) {
-        gear_++;
+    // redukcja – pozwóli zejść o 1 bieg na tick
+    if (rpm < downRpm && gear_ > 1) {
+        shiftDown();
         return;
     }
 
-    // Downshift: nie schodzi poniżej 1 (automat nie powinien wrzucać luzu w trakcie jazdy)
-    if (rpm < down && gear_ > 1) {
-        gear_--;
+    // zmiana w górę
+    if (rpm > upRpm && gear_ < maxGear()) {
+        shiftUp();
         return;
     }
-    //qDebug() << "AUTO gear=" << gear_ << " rpm=" << rpm << " up=" << up << " max=" << maxGear();
-
 }
 

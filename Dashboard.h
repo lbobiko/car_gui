@@ -10,7 +10,7 @@
 #include <QCheckBox>
 #include <QComboBox>
 
-class Car; // forward
+class Car;
 
 class Dashboard {
 public:
@@ -33,7 +33,8 @@ public:
               QCheckBox* tcsCheck,
               QComboBox* surfaceCombo,
               QLabel* absStatusInfo,
-              QLabel* tcsStatusInfo);
+              QLabel* tcsStatusInfo,
+              QLabel* gradeInfo);
 
     void refresh(const Car& car);
 
@@ -61,6 +62,8 @@ private:
     QComboBox* surfaceCombo_ = nullptr;
     QLabel* absStatusInfo_ = nullptr;
     QLabel* tcsStatusInfo_ = nullptr;
+
+    QLabel* gradeInfo_ = nullptr;
 
     void setStatus(QLabel* lbl, const QString& text, const QString& color);
 };

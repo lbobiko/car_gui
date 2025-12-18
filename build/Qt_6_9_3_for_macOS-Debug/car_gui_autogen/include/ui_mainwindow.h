@@ -34,7 +34,6 @@ public:
     QPushButton *throttleButton;
     QPushButton *brakeButton;
     QLabel *speedInfo;
-    QLabel *speedText;
     QLabel *distanceText;
     QLabel *distanceInfo;
     QLabel *engineInfo;
@@ -61,7 +60,6 @@ public:
     QLabel *modeLabel;
     QProgressBar *fuelBar;
     QLabel *gearInfo;
-    QLabel *speedText_2;
     QLabel *rpmInfo;
     QLabel *shiftModeInfo;
     QPushButton *btnShiftUp;
@@ -73,6 +71,10 @@ public:
     QCheckBox *tcsCheckBox;
     QLabel *absStatusInfo;
     QLabel *tcsStatusInfo;
+    QFrame *frame_2;
+    QLabel *gradeInfo;
+    QLabel *label_7;
+    QLabel *pauseInfo;
     QMenuBar *menubar;
     QStatusBar *statusbar;
 
@@ -94,10 +96,7 @@ public:
         brakeButton->setGeometry(QRect(400, 550, 151, 41));
         speedInfo = new QLabel(centralwidget);
         speedInfo->setObjectName("speedInfo");
-        speedInfo->setGeometry(QRect(220, 190, 111, 41));
-        speedText = new QLabel(centralwidget);
-        speedText->setObjectName("speedText");
-        speedText->setGeometry(QRect(220, 250, 61, 31));
+        speedInfo->setGeometry(QRect(40, 110, 151, 41));
         distanceText = new QLabel(centralwidget);
         distanceText->setObjectName("distanceText");
         distanceText->setGeometry(QRect(10, 10, 141, 41));
@@ -106,7 +105,7 @@ public:
         distanceInfo->setGeometry(QRect(160, 10, 111, 41));
         engineInfo = new QLabel(centralwidget);
         engineInfo->setObjectName("engineInfo");
-        engineInfo->setGeometry(QRect(10, 490, 121, 41));
+        engineInfo->setGeometry(QRect(10, 500, 121, 41));
         throttleInfo = new QLabel(centralwidget);
         throttleInfo->setObjectName("throttleInfo");
         throttleInfo->setGeometry(QRect(590, 480, 151, 41));
@@ -124,7 +123,7 @@ public:
         helpButton->setGeometry(QRect(640, 60, 151, 41));
         fuelInfo = new QLabel(centralwidget);
         fuelInfo->setObjectName("fuelInfo");
-        fuelInfo->setGeometry(QRect(20, 340, 180, 41));
+        fuelInfo->setGeometry(QRect(10, 300, 180, 41));
         refuelButton = new QPushButton(centralwidget);
         refuelButton->setObjectName("refuelButton");
         refuelButton->setGeometry(QRect(210, 550, 151, 41));
@@ -175,36 +174,33 @@ public:
         label_6->setGeometry(QRect(550, 290, 91, 16));
         modeLabel = new QLabel(centralwidget);
         modeLabel->setObjectName("modeLabel");
-        modeLabel->setGeometry(QRect(20, 250, 141, 41));
+        modeLabel->setGeometry(QRect(10, 200, 141, 41));
         fuelBar = new QProgressBar(centralwidget);
         fuelBar->setObjectName("fuelBar");
-        fuelBar->setGeometry(QRect(20, 310, 118, 23));
+        fuelBar->setGeometry(QRect(10, 250, 118, 23));
         fuelBar->setValue(40);
         fuelBar->setTextVisible(true);
         gearInfo = new QLabel(centralwidget);
         gearInfo->setObjectName("gearInfo");
-        gearInfo->setGeometry(QRect(220, 320, 58, 16));
-        speedText_2 = new QLabel(centralwidget);
-        speedText_2->setObjectName("speedText_2");
-        speedText_2->setGeometry(QRect(360, 250, 61, 31));
+        gearInfo->setGeometry(QRect(210, 310, 58, 16));
         rpmInfo = new QLabel(centralwidget);
         rpmInfo->setObjectName("rpmInfo");
-        rpmInfo->setGeometry(QRect(360, 200, 101, 16));
+        rpmInfo->setGeometry(QRect(320, 110, 201, 41));
         shiftModeInfo = new QLabel(centralwidget);
         shiftModeInfo->setObjectName("shiftModeInfo");
-        shiftModeInfo->setGeometry(QRect(350, 320, 151, 16));
+        shiftModeInfo->setGeometry(QRect(350, 310, 151, 16));
         btnShiftUp = new QPushButton(centralwidget);
         btnShiftUp->setObjectName("btnShiftUp");
-        btnShiftUp->setGeometry(QRect(639, 400, 121, 32));
+        btnShiftUp->setGeometry(QRect(640, 420, 131, 32));
         btnShiftDown = new QPushButton(centralwidget);
         btnShiftDown->setObjectName("btnShiftDown");
-        btnShiftDown->setGeometry(QRect(639, 430, 121, 32));
+        btnShiftDown->setGeometry(QRect(640, 450, 131, 32));
         btnToggleShiftMode = new QPushButton(centralwidget);
         btnToggleShiftMode->setObjectName("btnToggleShiftMode");
-        btnToggleShiftMode->setGeometry(QRect(639, 370, 121, 32));
+        btnToggleShiftMode->setGeometry(QRect(640, 390, 131, 32));
         frame = new QFrame(centralwidget);
         frame->setObjectName("frame");
-        frame->setGeometry(QRect(320, 370, 291, 91));
+        frame->setGeometry(QRect(260, 390, 341, 91));
         frame->setFrameShape(QFrame::Shape::StyledPanel);
         frame->setFrameShadow(QFrame::Shadow::Raised);
         surfaceCombo = new QComboBox(frame);
@@ -212,11 +208,11 @@ public:
         surfaceCombo->setGeometry(QRect(120, 50, 141, 32));
         absCheckBox = new QCheckBox(frame);
         absCheckBox->setObjectName("absCheckBox");
-        absCheckBox->setGeometry(QRect(100, 10, 85, 20));
+        absCheckBox->setGeometry(QRect(130, 10, 85, 20));
         absCheckBox->setChecked(true);
         tcsCheckBox = new QCheckBox(frame);
         tcsCheckBox->setObjectName("tcsCheckBox");
-        tcsCheckBox->setGeometry(QRect(200, 10, 85, 20));
+        tcsCheckBox->setGeometry(QRect(240, 10, 85, 20));
         tcsCheckBox->setChecked(true);
         absStatusInfo = new QLabel(frame);
         absStatusInfo->setObjectName("absStatusInfo");
@@ -224,6 +220,20 @@ public:
         tcsStatusInfo = new QLabel(frame);
         tcsStatusInfo->setObjectName("tcsStatusInfo");
         tcsStatusInfo->setGeometry(QRect(10, 60, 91, 21));
+        frame_2 = new QFrame(centralwidget);
+        frame_2->setObjectName("frame_2");
+        frame_2->setGeometry(QRect(10, 390, 221, 91));
+        frame_2->setFrameShape(QFrame::Shape::StyledPanel);
+        frame_2->setFrameShadow(QFrame::Shadow::Raised);
+        gradeInfo = new QLabel(frame_2);
+        gradeInfo->setObjectName("gradeInfo");
+        gradeInfo->setGeometry(QRect(20, 10, 181, 31));
+        label_7 = new QLabel(frame_2);
+        label_7->setObjectName("label_7");
+        label_7->setGeometry(QRect(20, 60, 191, 16));
+        pauseInfo = new QLabel(centralwidget);
+        pauseInfo->setObjectName("pauseInfo");
+        pauseInfo->setGeometry(QRect(300, 10, 121, 31));
         MainWindow->setCentralWidget(centralwidget);
         menubar = new QMenuBar(MainWindow);
         menubar->setObjectName("menubar");
@@ -257,7 +267,6 @@ public:
 #endif // QT_CONFIG(tooltip)
         brakeButton->setText(QCoreApplication::translate("MainWindow", "Brake", nullptr));
         speedInfo->setText(QCoreApplication::translate("MainWindow", "speed", nullptr));
-        speedText->setText(QCoreApplication::translate("MainWindow", "SPEED", nullptr));
         distanceText->setText(QCoreApplication::translate("MainWindow", "Distance travelled:", nullptr));
         distanceInfo->setText(QCoreApplication::translate("MainWindow", "0", nullptr));
         engineInfo->setText(QCoreApplication::translate("MainWindow", "Engine OFF", nullptr));
@@ -297,7 +306,6 @@ public:
         label_6->setText(QCoreApplication::translate("MainWindow", "Mode change:", nullptr));
         modeLabel->setText(QCoreApplication::translate("MainWindow", "Mode: normal", nullptr));
         gearInfo->setText(QCoreApplication::translate("MainWindow", "Gear", nullptr));
-        speedText_2->setText(QCoreApplication::translate("MainWindow", "RPM", nullptr));
         rpmInfo->setText(QCoreApplication::translate("MainWindow", "rpm", nullptr));
         shiftModeInfo->setText(QCoreApplication::translate("MainWindow", "shift", nullptr));
 #if QT_CONFIG(tooltip)
@@ -325,6 +333,9 @@ public:
         tcsCheckBox->setText(QCoreApplication::translate("MainWindow", "TCS", nullptr));
         absStatusInfo->setText(QCoreApplication::translate("MainWindow", "ABS check", nullptr));
         tcsStatusInfo->setText(QCoreApplication::translate("MainWindow", "TCS check", nullptr));
+        gradeInfo->setText(QCoreApplication::translate("MainWindow", "Grade: 0%", nullptr));
+        label_7->setText(QCoreApplication::translate("MainWindow", "Use '[' and ']' to change grade", nullptr));
+        pauseInfo->setText(QString());
     } // retranslateUi
 
 };

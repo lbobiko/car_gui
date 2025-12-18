@@ -1,11 +1,9 @@
 #include "Car.h"
-#include "Brake.h"
-#include "Engine.h"
-#include <string>
-#include <algorithm>
-#include "Constants.h"
-#include "TripComputer.h"
+
 #include <cmath>
+#include <algorithm>
+#include <QString>
+#include "ConsumptionModel.h"
 
 Car::Car()
     : name("Toyota")
@@ -14,244 +12,57 @@ Car::Car()
     , engine()
     , v_mps(0.0)
     , x_m(0.0)
-    , fuelTank_(50.0, 20.0)      // np. 50 L pojemności
+    , fuelTank_(50.0, 20.0)
     , fuelUsedTotal_(0.0)
     , consumption_(nullptr)
+    , gradePercent_(0.0)
+    , surfaceModel_(nullptr)
 {
-
+    surfaceModel_ = &asphaltDry_; // domyślnie
 }
 
-bool Car::getEngineStatus() const{
-    return engine.getEngineStatus();
-}
+std::string Car::getName() const { return name; }
 
-void Car::setEngineStatus(bool s){
-    engine.setEngineStatus(s);
-}
+bool Car::getEngineStatus() const { return engine.getEngineStatus(); }
+void Car::setEngineStatus(bool s) { engine.setEngineStatus(s); }
 
-double Car::getThrottle() const{
-    return throttle;
-}
+double Car::getThrottle() const { return throttle; }
+void Car::setThrottle(double t) { throttle = std::clamp(t, 0.0, 1.0); }
 
-void Car::setThrottle(double t){
-    this->throttle = std::clamp(t, 0.0, 1.0);
-}
+bool Car::getBrakeStatus() const { return brake.getBrakePressed(); }
+void Car::setBrakeStatus(bool b) { brake.setBrakePressed(b); }
 
-bool Car::getBrakeStatus() const{
-    return brake.getBrakePressed();
-}
+double Car::getDistance() const { return x_m; }
+double Car::getCurrentSpeed() const { return v_mps * 3.6; } // km/h
 
-void Car::setBrakeStatus(bool b){
-    brake.setBrakePressed(b);
-}
+double Car::getFuelLevel() const { return fuelTank_.getLevel(); }
+double Car::getFuelCapacity() const { return fuelTank_.getCapacity(); }
+double Car::getFuelUsedTotal() const { return fuelUsedTotal_; }
+void   Car::refuel(double liters) { fuelTank_.addFuel(liters); }
 
-double Car::getDistance() const{
-    return x_m;
-}
+void Car::setConsumptionModel(ConsumptionModel* model) { consumption_ = model; }
 
-double Car::getCurrentSpeed() const{
-    return v_mps * 3.6;  // w kilometrach
-}
+double Car::getTripDistanceKm() const { return tripComputer_.getDistanceKm(); }
+double Car::getTripAvgConsumption() const { return tripComputer_.getAvgConsumptionLPer100km(); }
+double Car::getTripTimeMinutes() const { return tripComputer_.getEngineTimeMinutes(); }
+double Car::getTripAvgSpeedKmh() const { return tripComputer_.getAvgSpeedKmh(); }
+void   Car::resetTrip() { tripComputer_.reset(); }
 
+bool Car::shouldShowFuelWarning() const { return fuelWarningShown_; }
+void Car::resetFuelWarning() { fuelWarningShown_ = false; }
 
-void Car::update(double dt)
+void Car::setGradePercent(double g) { gradePercent_ = std::clamp(g, -20.0, 20.0); }
+double Car::gradePercent() const { return gradePercent_; }
+
+void Car::setSurfacePreset(int idx)
 {
-    if (dt <= 0.0) return;
-
-    // --- skróty do czytelności ---
-    double v = v_mps;                 // stara prędkość [m/s]
-    bool engineOn = engine.getEngineStatus();
-    bool noFuel   = fuelTank_.isEmpty();
-
-    // jeśli hamujesz, odpuść gaz
-    if (brake.getBrakePressed()) {
-        throttle = 0.0;
+    switch (idx) {
+    case 0: surfaceModel_ = &asphaltDry_; break;
+    case 1: surfaceModel_ = &asphaltWet_; break;
+    case 2: surfaceModel_ = &gravel_;     break;
+    case 3: surfaceModel_ = &ice_;        break;
+    default: surfaceModel_ = &asphaltDry_; break;
     }
-
-    // etap 5
-    absActive_ = false;
-    tcsActive_ = false;
-    double mu = surfaceMu();
-    double F_max = mu * MASS_KG * 9.81;   // maksymalna siła “na styku opona–droga”
-
-    // jeśli nie ma paliwa, silnik gaśnie i gaz ignorowany
-    if (noFuel && engineOn) {
-        engine.setEngineStatus(false);
-        engineOn = false;
-        throttle = 0.0;      // pedał gazu ignorowany
-        fuelWarningShown_ = true;   // flaga
-    }
-
-    // --- skrzynia biegów / RPM ---
-
-    // aktualne obroty z biegu i prędkości
-    double rpm = computeRpm();
-
-        if (transmission_.mode() == ShiftMode::Auto) {
-        transmission_.updateAuto(rpm, throttle);
-        rpm = computeRpm();
-    }
-
-    // --- SIŁY ---
-
-    double F_eng   = 0.0;
-    double F_roll  = 0.0;
-    double F_drag  = 0.0;
-    double F_brake = 0.0;
-
-
-    // napęd – tylko gdy silnik działa i jest gaz
-    if (engineOn && throttle > 0.0) {
-        // moment silnika zależny od RPM i gazu
-        double torque = engineTorque(rpm); // jeśli torque ma zależeć też od throttle,
-
-        // przełożenie skrzyni + final drive; na luzie totalRatio() powinno być 0
-        double ratio = transmission_.totalRatio();
-
-        if (ratio > 0.0) { // zabezpieczenie: na luzie nie jedzie
-            double driveTorque = torque * ratio * DRIVELINE_EFF;
-            F_eng = driveTorque / WHEEL_RADIUS_M;
-        }
-    }
-
-
-    if (tcsEnabled_ && v > MIN_SPEED_FOR_SLIP && F_eng > F_max) {
-        tcsActive_ = true;
-        // ogranicza napęd do przyczepności
-        F_eng = F_max * TCS_REDUCE_FACTOR;   // np. 0.6
-        // albo “idealnie”:
-        // F_eng = F_max;
-    }
-
-    // opory (toczenie + powietrze) tylko przy dodatniej prędkości
-    if (v > 0.0) {
-        F_roll = C_ROLL;
-        F_drag = C_DRAG * v * v;
-    }
-
-    // hamulec
-    if (brake.getBrakePressed()) {
-        double desiredBrake = K_BRAKE;
-
-        if (desiredBrake > F_max && v > 0.5) {
-
-            if (absEnabled_) {
-                absActive_ = true;
-
-                absTime_ += dt;
-                double period = 1.0 / ABS_PULSE_HZ;
-                bool release = std::fmod(absTime_, period) < (0.5 * period);
-
-                desiredBrake = F_max * (release ? ABS_RELEASE_FACTOR : 1.0);
-            } else {
-                // bez ABS: “blokada kół” → gorsze hamowanie niż F_max
-                desiredBrake = F_max * 0.60; // np. 60% przyczepności
-            }
-
-        } else {
-            // hamowanie w granicach przyczepności
-            desiredBrake = std::min(desiredBrake, F_max);
-            absTime_ = 0.0; // opcjonalnie
-        }
-
-        F_brake = desiredBrake;
-    }
-
-    // suma sił
-    double F = F_eng - F_roll - F_drag - F_brake;
-
-    // gdy prędkość w okolicach zera
-    if (v <= 0.0 && F < 0.0) {
-        F = 0.0;
-    }
-
-    // --- RÓWNANIA RUCHU ---
-
-    double a    = F / MASS_KG;     // przyspieszenie [m/s^2]
-    double vNew = v + a * dt;      // nowa prędkość [m/s]
-
-    // ograniczenia 0 ≤ v ≤ VMAX
-    if (vNew < 0.0)     vNew = 0.0;
-    if (vNew > VMAX_MPS) vNew = VMAX_MPS;
-
-    // droga w tym kroku
-    double dx = vNew * dt;         // [m]
-    x_m += dx;
-    v_mps = vNew;
-
-    // --- PALIWO ---
-
-    double usedNow = 0.0;
-
-    if (engineOn && !noFuel && consumption_ != nullptr) {
-        // prędkość w km/h do modelu spalania
-        double v_kmh = vNew * 3.6;
-
-        // przepływ paliwa [L/s]
-        double flowLps = consumption_->fuelFlowLps(throttle, v_kmh);
-
-        if (flowLps < 0.0) flowLps = 0.0;
-
-        // ile litrów w tym kroku
-        double fuelStep = flowLps * dt;
-
-        // zjedz paliwo z baku (uwaga: consume może zwrócić mniej, jeśli bak prawie pusty)
-        usedNow = fuelTank_.consume(fuelStep);
-        fuelUsedTotal_ += usedNow;
-    }
-
-    // --- TRIP COMPUTER ---
-
-    bool engineReallyOn = engineOn && !fuelTank_.isEmpty();
-    tripComputer_.addSample(dx, usedNow, dt, engineReallyOn);
-
-
-}
-
-double Car::getFuelLevel() const {
-    return fuelTank_.getLevel();
-}
-
-double Car::getFuelCapacity() const {
-    return fuelTank_.getCapacity();
-}
-
-double Car::getFuelUsedTotal() const {
-    return fuelUsedTotal_;
-}
-
-void Car::refuel(double liters) {
-    fuelTank_.addFuel(liters);
-}
-
-void Car::setConsumptionModel(ConsumptionModel* model)
-{
-    consumption_ = model;
-}
-
-// statystyki z TripComputer
-double Car::getTripDistanceKm() const{
-    return tripComputer_.getDistanceKm();
-}
-double Car::getTripAvgConsumption() const  {
-    return tripComputer_.getAvgConsumptionLPer100km();
-}
-double Car::getTripTimeMinutes() const     {
-    return tripComputer_.getEngineTimeMinutes();
-}
-double Car::getTripAvgSpeedKmh() const     {
-    return tripComputer_.getAvgSpeedKmh();
-}
-
-void Car::resetTrip() {
-    tripComputer_.reset();
-}
-
-bool Car::shouldShowFuelWarning() const {
-    return fuelWarningShown_;
-}
-void Car::resetFuelWarning() {
-    fuelWarningShown_ = false;
 }
 
 double Car::computeRpm() const
@@ -259,17 +70,15 @@ double Car::computeRpm() const
     if (!engine.getEngineStatus()) return 0.0;
 
     double ratio = transmission_.totalRatio();
-
-    // luz: trzymaj jałowe (albo 0, ale jałowe wygląda lepiej)
     if (ratio <= 0.0) return IDLE_RPM;
 
-    double wheel_rps = v_mps / (2.0 * M_PI * WHEEL_RADIUS_M); // obr/s
+    double wheel_rps = v_mps / (2.0 * M_PI * WHEEL_RADIUS_M);
     double wheel_rpm = wheel_rps * 60.0;
 
     double rpm = wheel_rpm * ratio;
 
     if (rpm < IDLE_RPM) rpm = IDLE_RPM;
-    if (rpm > REDLINE_RPM) rpm = REDLINE_RPM; // żeby test "nie przekracza redline" przechodził
+    if (rpm > REDLINE_RPM) rpm = REDLINE_RPM;
 
     return rpm;
 }
@@ -279,33 +88,182 @@ double Car::engineTorque(double rpm) const
     if (!engine.getEngineStatus() || throttle <= 0.0)
         return 0.0;
 
-    // stopień wciśnięcia gazu (0–1)
     double t = std::clamp(throttle, 0.0, 1.0);
-
-    // odległość od optymalnych obrotów
     double x = (rpm - RPM_TORQUE_PEAK) / RPM_TORQUE_WIDTH;
 
-    // pseudo-gauss: duży moment koło RPM_TORQUE_PEAK, maleje na boki
-    double shape = std::exp(-0.5 * x * x);   // 1.0 w środku, maleje do 0
+    double shape = std::exp(-0.5 * x * x);
+    double torque = TORQUE_MAX_NM * shape * t;
 
-    double torque = TORQUE_MAX_NM * shape * t;   // [Nm]
-
-    // poza zakresem jałowy–redline mocno przyduszamy silnik
     if (rpm < IDLE_RPM || rpm > REDLINE_RPM)
         torque *= 0.3;
 
-    return torque;   // [Nm]
+    return torque;
 }
 
-double Car::surfaceMu() const
+void Car::update(double dt)
 {
-    switch (surface_) {
-    case Surface::Dry: return 0.95;
-    case Surface::Wet: return 0.60;
-    case Surface::Ice: return 0.15;
+    if (dt <= 0.0) return;
+
+    double v = v_mps;
+    bool engineOn = engine.getEngineStatus();
+    bool noFuel   = fuelTank_.isEmpty();
+
+    // hamulec -> odpuszczamy gaz
+    if (brake.getBrakePressed()) {
+        throttle = 0.0;
     }
-    return 0.8;
+
+    // --- Etap 5: reset flag ABS/TCS ---
+    absActive_ = false;
+    tcsActive_ = false;
+
+    // --- Strategy nawierzchni ---
+    const double mu = getMu();
+    const double F_max = mu * MASS_KG * 9.81;
+
+    // brak paliwa -> gaś silnik
+    if (noFuel && engineOn) {
+        engine.setEngineStatus(false);
+        engineOn = false;
+        throttle = 0.0;
+        fuelWarningShown_ = true;
+    }
+
+    // --- skrzynia / rpm ---
+    double rpm = computeRpm();
+
+    if (transmission_.mode() == ShiftMode::Auto) {
+        transmission_.updateAuto(rpm, throttle);
+        rpm = computeRpm();
+    }
+
+    // --- siły ---
+    double F_eng   = 0.0;
+    double F_roll  = 0.0;
+    double F_drag  = 0.0;
+    double F_brake = 0.0;
+
+    // napęd
+    if (engineOn && throttle > 0.0) {
+        double torque = engineTorque(rpm);
+        double ratio  = transmission_.totalRatio();
+
+        if (ratio > 0.0) {
+            double driveTorque = torque * ratio * DRIVELINE_EFF;
+            F_eng = driveTorque / WHEEL_RADIUS_M;
+        }
+    }
+
+    // TCS: jeśli siła napędowa > przyczepność, ogranicz
+    if (tcsEnabled_ && v > MIN_SPEED_FOR_SLIP && F_eng > F_max) {
+        tcsActive_ = true;
+        F_eng = F_max * TCS_REDUCE_FACTOR;
+    }
+
+    // opory
+    if (v > 0.0) {
+        F_roll = C_ROLL;
+        F_drag = C_DRAG * v * v;
+    }
+
+    // hamowanie + ABS
+    if (brake.getBrakePressed()) {
+        double desiredBrake = K_BRAKE;
+
+        if (desiredBrake > F_max && v > 0.5) {
+            if (absEnabled_) {
+                absActive_ = true;
+
+                absTime_ += dt;
+                double period = 1.0 / ABS_PULSE_HZ;
+                bool release = std::fmod(absTime_, period) < (0.5 * period);
+
+                desiredBrake = F_max * (release ? ABS_RELEASE_FACTOR : 1.0);
+            } else {
+                // bez ABS: blokada kół → gorsze hamowanie
+                desiredBrake = F_max * 0.60;
+            }
+        } else {
+            desiredBrake = std::min(desiredBrake, F_max);
+            absTime_ = 0.0;
+        }
+
+        F_brake = desiredBrake;
+    }
+
+    // --- Etap 6: nachylenie terenu ---
+    double alpha = std::atan(gradePercent_ / 100.0);
+    double F_grade = MASS_KG * 9.81 * std::sin(alpha);
+
+    // suma sił
+    double F = F_eng - F_roll - F_drag - F_brake - F_grade;
+
+    // blokada “poniżej zera”
+    if (v <= 0.0 && F < 0.0) {
+        F = 0.0;
+    }
+
+    // ruch
+    double a    = F / MASS_KG;
+    double vNew = v + a * dt;
+
+    if (vNew < 0.0)      vNew = 0.0;
+    if (vNew > VMAX_MPS) vNew = VMAX_MPS;
+
+    double dx = vNew * dt;
+    x_m   += dx;
+    v_mps  = vNew;
+
+    // paliwo
+    double usedNow = 0.0;
+
+    if (engineOn && !noFuel && consumption_ != nullptr) {
+        double v_kmh  = vNew * 3.6;
+        double flowLps = consumption_->fuelFlowLps(throttle, v_kmh);
+        if (flowLps < 0.0) flowLps = 0.0;
+
+        double fuelStep = flowLps * dt;
+        usedNow = fuelTank_.consume(fuelStep);
+        fuelUsedTotal_ += usedNow;
+    }
+
+    // trip computer
+    bool engineReallyOn = engineOn && !fuelTank_.isEmpty();
+    tripComputer_.addSample(dx, usedNow, dt, engineReallyOn);
 }
 
-bool Car::absEnabled() const { return absEnabled_; }
-bool Car::tcsEnabled() const { return tcsEnabled_; }
+// ---------- Strategy nawierzchni: metody pomocnicze ----------
+double Car::getMu() const
+{
+    return surfaceModel_ ? surfaceModel_->mu() : 0.95;
+}
+
+QString Car::getSurfaceName() const
+{
+    return surfaceModel_ ? surfaceModel_->name() : "Asphalt (Dry)";
+}
+
+void Car::resetAll()
+{
+    throttle = 0.0;
+    v_mps = 0.0;
+    x_m = 0.0;
+
+    brake.setBrakePressed(false);
+    engine.setEngineStatus(false);
+
+    transmission_ = Transmission(); // reset skrzyni do domyślnego stanu
+    absActive_ = false;
+    tcsActive_ = false;
+    absTime_ = 0.0;
+
+    gradePercent_ = 0.0;
+
+    fuelTank_ = FuelTank(50.0, 20.0); // startowe 20L
+    fuelUsedTotal_ = 0.0;
+    fuelWarningShown_ = false;
+
+    tripComputer_.reset();
+
+    surfaceModel_ = &asphaltDry_;
+}

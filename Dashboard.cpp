@@ -20,7 +20,8 @@ Dashboard::Dashboard(QLabel* engineInfo,
                      QCheckBox* tcsCheck,
                      QComboBox* surfaceCombo,
                      QLabel* absStatusInfo,
-                     QLabel* tcsStatusInfo)
+                     QLabel* tcsStatusInfo,
+                     QLabel* gradeInfo)
     : engineInfo_(engineInfo),
     throttleInfo_(throttleInfo),
     throttleDet_(throttleDetail),
@@ -40,9 +41,10 @@ Dashboard::Dashboard(QLabel* engineInfo,
     tcsCheck_(tcsCheck),
     surfaceCombo_(surfaceCombo),
     absStatusInfo_(absStatusInfo),
-    tcsStatusInfo_(tcsStatusInfo)
+    tcsStatusInfo_(tcsStatusInfo),
+    gradeInfo_(gradeInfo)
 {
-    // opcjonalne startowe wartości/formaty
+    // startowe wartości/formaty
     if (speedInfo_) {
         speedInfo_->setStyleSheet("font-size:28px; font-weight:bold; font-family:'Courier New';");
     }
@@ -51,12 +53,16 @@ Dashboard::Dashboard(QLabel* engineInfo,
         fuelBar_->setValue(0);
         fuelBar_->setTextVisible(false);
     }
+    if (rpmInfo_) {
+        rpmInfo_->setStyleSheet("font-size:28px; font-weight:bold; font-family:'Courier New';");
+    }
 
     if (surfaceCombo_) {
         surfaceCombo_->clear();
-        surfaceCombo_->addItem("Dry",  0);
-        surfaceCombo_->addItem("Wet",  1);
-        surfaceCombo_->addItem("Ice",  2);
+        surfaceCombo_->addItem("Asphalt (Dry)");
+        surfaceCombo_->addItem("Asphalt (Wet)");
+        surfaceCombo_->addItem("Gravel");
+        surfaceCombo_->addItem("Ice");
     }
 }
 
@@ -116,7 +122,8 @@ void Dashboard::refresh(const Car& car) {
         speedInfo_->setStyleSheet(
             "color: " + color + "; font-size:28px; font-weight:bold; font-family:'Courier New';"
             );
-        speedInfo_->setText(QString::number(v, 'f', 2));
+        //speedInfo_->setText(QString::number(v, 'f', 2));
+        speedInfo_->setText(QString("SPD %1").arg(v, 0, 'f', 2));
     }
 
     // Distance metry -> km
@@ -163,7 +170,7 @@ void Dashboard::refresh(const Car& car) {
 
         fuelBar_->setValue(percInt);
 
-        // opcjonalnie: zmiana koloru w zależności od poziomu
+        // zmiana koloru w zależności od poziomu
         if (percInt > 50) {
             fuelBar_->setStyleSheet(
                 "QProgressBar { border: 1px solid gray; border-radius: 3px; }"
@@ -179,8 +186,31 @@ void Dashboard::refresh(const Car& car) {
         }
     }
     // ------------Gears------------------
-    gearInfo_->setText(QString("Gear: %1").arg(car.getGear()));
-    rpmInfo_->setText(QString("RPM: %1").arg((int)car.getRpm()));
+    if (gearInfo_) {
+        gearInfo_->setText(QString("Gear: %1").arg(car.getGear()));
+    }
+
+    if (rpmInfo_) {
+        const double rpm = car.getRpm();
+        QString color;
+
+        // progi dopasowane do stałych (IDLE=900, REDLINE=6500)
+        if (rpm < 3000.0) {
+            color = "green";
+        } else if (rpm < 5000.0) {
+            color = "orange";
+        } else {
+            color = "red";
+        }
+
+        rpmInfo_->setStyleSheet(
+            "color: " + color + "; font-size:28px; font-weight:bold; font-family:'Courier New';"
+            );
+
+        rpmInfo_->setText(QString("RPM: %1").arg((int)rpm));
+    }
+
+
     shiftModeInfo_->setText(
         QString("Mode: %1").arg(car.getShiftMode() == ShiftMode::Auto ? "Auto" : "Manual")
         );
@@ -226,6 +256,16 @@ void Dashboard::refresh(const Car& car) {
         else                 setStatus(tcsStatusInfo_, "TCS", "gray");
     }
 
+    if (gradeInfo_) {
+        double g = car.gradePercent();
+        QString sign = (g > 0.01) ? "+" : "";
+        QString txt = QString("Grade: %1%2%").arg(sign).arg(g, 0, 'f', 1);
 
+        QString color = "gray";
+        if (g > 0.5) color = "orange";      // pod górę
+        else if (g < -0.5) color = "cyan";  // z górki
+
+        setStatus(gradeInfo_, txt, color);
+    }
 
 }

@@ -1,6 +1,10 @@
 #ifndef CAR_H
 #define CAR_H
+
 #include <string>
+#include <algorithm>
+#include <QString>
+
 #include "Brake.h"
 #include "Engine.h"
 #include "FuelTank.h"
@@ -8,10 +12,7 @@
 #include "Constants.h"
 #include "TripComputer.h"
 #include "Transmission.h"
-
-enum class Surface {
-    Dry, Wet, Ice
-};
+#include "SurfaceModel.h"   // Strategy: SurfaceModel + klasy pochodne
 
 class Car {
 private:
@@ -21,83 +22,112 @@ private:
     Brake  brake;
     Engine engine;
 
-    double v_mps = 0.0;   // prędkość w m/s
-    double x_m   = 0.0;   // pozycja w m
+    double v_mps = 0.0;   // prędkość [m/s]
+    double x_m   = 0.0;   // pozycja [m]
 
     FuelTank fuelTank_;
     double   fuelUsedTotal_ = 0.0;
 
-    ConsumptionModel* consumption_ = nullptr;   // ← tylko wskaźnik
+    ConsumptionModel* consumption_ = nullptr;   // Strategy spalania
 
     TripComputer tripComputer_;
-
     bool fuelWarningShown_ = false;
 
     Transmission transmission_;
     double computeRpm() const;
     double engineTorque(double rpm) const;
-    // Etap 5
+
+    // --- Etap 5: ABS / TCS ---
     bool absEnabled_ = false;
     bool tcsEnabled_ = false;
-    bool absActive_ = false;  // flaga
-    bool tcsActive_ = false;
-    double surfaceMu() const;
-    double absTime_ = 0.0;   // czas do pulsowania ABS
-    Surface surface_ = Surface::Dry;
+    bool absActive_  = false;
+    bool tcsActive_  = false;
+
+    double absTime_ = 0.0;   // do pulsowania ABS
+
+    // --- Etap 6: nachylenie + nawierzchnia (Strategy) ---
+    double gradePercent_ = 0.0;  // np. -20 .. +20
+
+    SurfaceModel* surfaceModel_ = nullptr; // aktywna strategia
+    AsphaltDry  asphaltDry_;
+    AsphaltWet  asphaltWet_;
+    Gravel      gravel_;
+    Ice         ice_;
 
 public:
     Car();
 
+    // podstawowe
     std::string getName() const;
-    double getCurrentSpeed() const;
+    double getCurrentSpeed() const; // km/h
     double getThrottle() const;
     double getDistance() const;
 
-    void   update(double dt);
+    void update(double dt);
 
+    // silnik / hamulec / gaz
     bool getEngineStatus() const;
     void setEngineStatus(bool s);
 
     bool getBrakeStatus() const;
     void setBrakeStatus(bool b);
 
+    void setThrottle(double t);
+
+    // paliwo
     double getFuelLevel() const;
     double getFuelCapacity() const;
     double getFuelUsedTotal() const;
     void   refuel(double liters);
 
-    void   setThrottle(double t);
-
-    // zmiana strategii spalania
+    // spalanie (Strategy)
     void setConsumptionModel(ConsumptionModel* model);
 
-    // statystyki z TripComputer
+    // trip computer
     double getTripDistanceKm() const;
     double getTripAvgConsumption() const;
     double getTripTimeMinutes() const;
     double getTripAvgSpeedKmh() const;
-
     void resetTrip();
 
+    // ostrzeżenie paliwa
     bool shouldShowFuelWarning() const;
     void resetFuelWarning();
+
+    // skrzynia
     int getGear() const { return transmission_.gear(); }
     ShiftMode getShiftMode() const { return transmission_.mode(); }
     double getRpm() const { return computeRpm(); }
-    // Etap 4
+
     void toggleShiftMode() { transmission_.toggleMode(); }
     void shiftUp()   { transmission_.shiftUp(); }
     void shiftDown() { transmission_.shiftDown(); }
-    // Etap 5
+
+    // ABS/TCS
     void setAbsEnabled(bool on) { absEnabled_ = on; }
     void setTcsEnabled(bool on) { tcsEnabled_ = on; }
-    void setSurface(Surface s)  { surface_ = s; }
 
-    bool absActive() const { return absActive_; }
-    bool tcsActive() const { return tcsActive_; }
-    bool absEnabled() const;
-    bool tcsEnabled() const;
-    Surface surface() const { return surface_; }
+    bool absEnabled() const { return absEnabled_; }
+    bool tcsEnabled() const { return tcsEnabled_; }
+    bool absActive()  const { return absActive_; }
+    bool tcsActive()  const { return tcsActive_; }
+
+    // nachylenie
+    void setGradePercent(double g);
+    double gradePercent() const;
+
+    // nawierzchnia (Strategy)
+    void setSurfaceModel(SurfaceModel* model) { surfaceModel_ = model; }
+    //double getMu() const { return surfaceModel_ ? surfaceModel_->mu() : 0.95; }
+    //QString getSurfaceName() const { return surfaceModel_ ? surfaceModel_->name() : "Asphalt (Dry)"; }
+
+    // preset do klawiszy/GUI: 0..3
+    void setSurfacePreset(int idx);
+
+    double getMu() const;
+    QString getSurfaceName() const;
+
+    void resetAll();
 };
 
 #endif

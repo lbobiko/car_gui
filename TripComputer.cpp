@@ -1,6 +1,5 @@
 #include "TripComputer.h"
 
-// Konstruktor
 TripComputer::TripComputer()
     : distance_m_(0.0),
     fuelUsed_l_(0.0),

@@ -56,6 +56,8 @@ private:
 
     void animateModeLabel();   // pomocnicza metoda do animacji
 
+    bool paused_ = false;
+
 
 };
 #endif // MAINWINDOW_H

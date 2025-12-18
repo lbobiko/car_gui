@@ -14,6 +14,7 @@
 #include "ConsumptionModel.h"
 #include <QCheckBox>
 #include <QComboBox>
+#include <QScrollArea>
 
 MainWindow::MainWindow(QWidget *parent)
     : QMainWindow(parent)
@@ -47,6 +48,7 @@ MainWindow::MainWindow(QWidget *parent)
         "}"
         );
 
+
     // efekt przezroczystości dla modeLabel
     modeLabelEffect = new QGraphicsOpacityEffect(this);
     modeLabelEffect->setOpacity(1.0);
@@ -72,7 +74,8 @@ MainWindow::MainWindow(QWidget *parent)
         ui->tcsCheckBox,
         ui->surfaceCombo,
         ui->absStatusInfo,
-        ui->tcsStatusInfo
+        ui->tcsStatusInfo,
+        ui->gradeInfo
 
         );
 
@@ -98,13 +101,69 @@ MainWindow::MainWindow(QWidget *parent)
 
     connect(ui->surfaceCombo, QOverload<int>::of(&QComboBox::currentIndexChanged),
             this, [this](int idx){
-                car.setSurface(static_cast<Surface>(idx));
+                car.setSurfacePreset(idx);   // 0..3
             });
     car.setAbsEnabled(ui->absCheckBox->isChecked());
     car.setTcsEnabled(ui->tcsCheckBox->isChecked());
-    car.setSurface(static_cast<Surface>(ui->surfaceCombo->currentIndex()));
+    car.setSurfacePreset(ui->surfaceCombo->currentIndex());
 
+    // nachylenie - etap 6
+    auto scGradeDown = new QShortcut(QKeySequence(Qt::Key_BracketLeft), this);   // [
+    auto scGradeUp   = new QShortcut(QKeySequence(Qt::Key_BracketRight), this);  // ]
 
+    scGradeDown->setContext(Qt::ApplicationShortcut);
+    scGradeUp->setContext(Qt::ApplicationShortcut);
+
+    connect(scGradeDown, &QShortcut::activated, this, [this]{
+        car.setGradePercent(car.gradePercent() - 1.0);
+        dashboard->refresh(car);
+    });
+
+    connect(scGradeUp, &QShortcut::activated, this, [this]{
+        car.setGradePercent(car.gradePercent() + 1.0);
+        dashboard->refresh(car);
+    });
+
+    // P: pauza / wznowienie
+    auto scPause = new QShortcut(QKeySequence(Qt::Key_P), this);
+    scPause->setContext(Qt::ApplicationShortcut);
+    connect(scPause, &QShortcut::activated, this, [this]{
+        paused_ = !paused_;
+        if (paused_) {
+            timer->stop();
+            ui->pauseInfo->setText("PAUSED!");}
+        else         {
+            timer->start(DT * 1000);
+            ui->pauseInfo->setText("");}
+
+        ui->pauseInfo->setAlignment(Qt::AlignCenter);
+        ui->pauseInfo->setStyleSheet(
+            "font-size: 28px;"
+            "font-weight: bold;"
+            "color: orange;"
+            );
+    });
+    // RESET
+    auto scReset = new QShortcut(QKeySequence(Qt::Key_Backspace), this);
+    scReset->setContext(Qt::ApplicationShortcut);
+    connect(scReset, &QShortcut::activated, this, [this]{
+        paused_ = false;
+        timer->start(DT * 1000);
+
+        car.resetAll();
+
+        // reset ustawień GUI
+        ui->absCheckBox->setChecked(true);
+        ui->tcsCheckBox->setChecked(true);
+        ui->surfaceCombo->setCurrentIndex(0);
+        ui->modeCombo->setCurrentIndex(1);
+
+        car.setAbsEnabled(ui->absCheckBox->isChecked());
+        car.setTcsEnabled(ui->tcsCheckBox->isChecked());
+        car.setSurfacePreset(ui->surfaceCombo->currentIndex());
+
+        dashboard->refresh(car);
+    });
 
     // --- Skrzynia biegów: GUI ---
 
@@ -152,11 +211,25 @@ MainWindow::MainWindow(QWidget *parent)
     keyEngine->setContext(Qt::ApplicationShortcut); // działa niezależnie od focusu
     connect(keyEngine, &QShortcut::activated, this, &MainWindow::engineButtonClicked);
 
-    // strzałki
+    // strzałki - sterowanie throttle
     auto keyUp   = new QShortcut(QKeySequence(Qt::Key_Up), this);
     auto keyDown = new QShortcut(QKeySequence(Qt::Key_Down), this);
     connect(keyUp,   &QShortcut::activated, this, [this]{ car.setThrottle(1.0); });
     connect(keyDown, &QShortcut::activated, this, [this]{ car.setThrottle(0.0); });
+    auto scThrottleUp = new QShortcut(QKeySequence(Qt::Key_W), this);
+    auto scThrottleDn = new QShortcut(QKeySequence(Qt::Key_S), this);
+    scThrottleUp->setContext(Qt::ApplicationShortcut);
+    scThrottleDn->setContext(Qt::ApplicationShortcut);
+
+    connect(scThrottleUp, &QShortcut::activated, this, [this]{
+        car.setThrottle(car.getThrottle() + 0.1);   // +10%
+        dashboard->refresh(car);
+    });
+
+    connect(scThrottleDn, &QShortcut::activated, this, [this]{
+        car.setThrottle(car.getThrottle() - 0.1);   // -10%
+        dashboard->refresh(car);
+    });
 
     // Klawisz q
     auto keyQuit = new QShortcut(QKeySequence(Qt::Key_Q), this);
@@ -164,8 +237,6 @@ MainWindow::MainWindow(QWidget *parent)
     connect(keyQuit, &QShortcut::activated, this, &MainWindow::quitButtonClicked);
 
     connect(ui->helpButton, &QPushButton::clicked, this, &MainWindow::showHelpDialog);
-
-    // startButton to objectName przycisku w .ui
     connect(ui->engineButton, &QPushButton::clicked, this, &MainWindow::engineButtonClicked);
     connect(ui->throttleButton, &QPushButton::clicked, this, &MainWindow::throttleButtonClicked);
 
@@ -219,6 +290,32 @@ MainWindow::MainWindow(QWidget *parent)
     connect(scModeSport,  &QShortcut::activated, this, [this]{
         ui->modeCombo->setCurrentIndex(2); // Sport
     });
+
+    // Surface presets (Etap 6)
+    // 4..7: wybór nawierzchni (index jak w setSurfacePreset)
+    auto scSurf0 = new QShortcut(QKeySequence(Qt::Key_4), this);
+    auto scSurf1 = new QShortcut(QKeySequence(Qt::Key_5), this);
+    auto scSurf2 = new QShortcut(QKeySequence(Qt::Key_6), this);
+    auto scSurf3 = new QShortcut(QKeySequence(Qt::Key_7), this);
+
+    scSurf0->setContext(Qt::ApplicationShortcut);
+    scSurf1->setContext(Qt::ApplicationShortcut);
+    scSurf2->setContext(Qt::ApplicationShortcut);
+    scSurf3->setContext(Qt::ApplicationShortcut);
+
+    auto setSurfaceIdx = [this](int idx){
+        car.setSurfacePreset(idx);
+        if (ui->surfaceCombo) {
+            QSignalBlocker b(ui->surfaceCombo);
+            ui->surfaceCombo->setCurrentIndex(idx);
+        }
+        dashboard->refresh(car);
+    };
+
+    connect(scSurf0, &QShortcut::activated, this, [=]{ setSurfaceIdx(0); }); // Asphalt Dry
+    connect(scSurf1, &QShortcut::activated, this, [=]{ setSurfaceIdx(1); }); // Asphalt Wet
+    connect(scSurf2, &QShortcut::activated, this, [=]{ setSurfaceIdx(2); }); // Gravel
+    connect(scSurf3, &QShortcut::activated, this, [=]{ setSurfaceIdx(3); }); // Ice
 
     // Reset button
     connect(ui->resetTripButton, &QPushButton::clicked,
@@ -290,6 +387,7 @@ void MainWindow::updateSimulation()
             );
 
         car.resetFuelWarning();
+
     }
 
 }
@@ -345,78 +443,101 @@ void MainWindow::quitButtonClicked(){
     QApplication::quit();
 }
 
-
 void MainWindow::showHelpDialog()
 {
     QDialog helpDialog(this);
-    helpDialog.setWindowTitle("Pomoc – Sterowanie Symulatorem");
+    helpDialog.setWindowTitle("Pomoc – Sterowanie symulatorem");
     helpDialog.setModal(true);
-    helpDialog.resize(500, 460);
-    helpDialog.setStyleSheet(
-        "background-color: #111;"
-        "color: #eee;"
-        "font-family: 'Courier New';"
-        "font-size: 14px;"
-        "border: 2px solid #0f0;"
-        );
 
-    QLabel *info = new QLabel(&helpDialog);
-    info->setText(
-        "<h3 style='color:#0f0;'>🧭 Sterowanie symulatorem</h3>"
-        "<p>"
-        "🟢 <b>E</b> – Uruchom / wyłącz silnik<br>"
-        "🔼 <b>Strzałka w górę</b> – Gaz 100%<br>"
-        "🔽 <b>Strzałka w dół</b> – Gaz 0%<br>"
-        "⎵ <b>Spacja</b> – Hamowanie (działa tylko gdy trzymasz)<br>"
-        "🔄 <b>R</b> – Tankowanie +5 L<br>"
-        "<br>"
+    helpDialog.resize(800, 520);
 
-        "🕹️ <b>Skrzynia biegów</b>:<br>"
-        "🔁 <b>M</b> – Przełącz tryb: <b>Auto</b> / <b>Manual</b><br>"
-        "⬆️ <b>A</b> – Bieg w górę (tylko w Manual)<br>"
-        "⬇️ <b>Z</b> – Bieg w dół (tylko w Manual)<br>"
-        "<span style='color:#ccc;'>Uwaga: na luzie (Gear 0) auto nie przyspiesza.</span><br>"
-        "<br>"
+    // ===== Tytuł =====
+    QLabel *title = new QLabel("Sterowanie symulatorem");
+    QFont titleFont = title->font();
+    titleFont.setPointSize(titleFont.pointSize() + 4);
+    titleFont.setBold(true);
+    title->setFont(titleFont);
 
-        "⚙️ <b>Tryb spalania</b>:<br>"
-        "&nbsp;&nbsp;&nbsp;① <b>1</b> – Eco<br>"
-        "&nbsp;&nbsp;&nbsp;② <b>2</b> – Normal<br>"
-        "&nbsp;&nbsp;&nbsp;③ <b>3</b> – Sport<br>"
-        "<br>"
+    // ===== Treść =====
+    QLabel *content = new QLabel;
+    content->setText(R"(
+<b>Podstawowe sterowanie</b><br>
+• <b>E</b> – uruchom / wyłącz silnik (blokada wyłączenia w trakcie jazdy)<br>
+• <b>Strzałka ↑</b> – gaz 100%<br>
+• <b>Strzałka ↓</b> – gaz 0%<br>
+• <b>W / S</b> – zwiększ / zmniejsz gaz o +/- 10%<br>
+• <b>Spacja</b> – hamowanie (działa tylko gdy trzymasz)<br>
+• <b>R</b> – tankowanie +5 L<br>
+• <b>Q</b> – wyjście z programu<br>
+• <b>P</b> – pauza<br>
+• <b>Backspace</b> – reset do ustawień początkowych<br>
+<br>
 
-        "⛽ <b>Pasek paliwa</b>: kolor zmienia się przy niskim poziomie<br>"
-        "&nbsp;&nbsp;&nbsp;• zielony – &gt;20%<br>"
-        "&nbsp;&nbsp;&nbsp;• pomarańczowy – 10–20%<br>"
-        "&nbsp;&nbsp;&nbsp;• czerwony – &lt;10%<br>"
-        "<br>"
+<b>Skrzynia biegów</b><br>
+• <b>M</b> – przełącz tryb Auto / Manual<br>
+• <b>A</b> – bieg w górę (tylko Manual)<br>
+• <b>Z</b> – bieg w dół (tylko Manual)<br>
+Uwaga: na luzie (Gear 0) auto nie przyspiesza.<br>
+<br>
 
-        "📊 <b>Trip Computer</b> mierzy:<br>"
-        "&nbsp;&nbsp;&nbsp;• czas jazdy<br>"
-        "&nbsp;&nbsp;&nbsp;• dystans<br>"
-        "&nbsp;&nbsp;&nbsp;• średnią prędkość<br>"
-        "&nbsp;&nbsp;&nbsp;• średnie zużycie paliwa<br>"
-        "Możesz go wyzerować przyciskiem <b>Reset trip</b>."
-        "</p>"
-        "<hr>"
-        "<p style='color:#ccc;'>Symulator aktualizuje stan co 20 ms (DT = 0.02 s).</p>"
-        );
+<b>Tryb spalania</b><br>
+• <b>1</b> – Eco<br>
+• <b>2</b> – Normal<br>
+• <b>3</b> – Sport<br>
+<br>
 
-    info->setWordWrap(true);
-    info->setAlignment(Qt::AlignLeft | Qt::AlignTop);
+<b>Etap 5 – ABS / TCS</b><br>
+• Checkbox <b>ABS</b> – włącza / wyłącza system ABS<br>
+• Checkbox <b>TCS</b> – włącza / wyłącza kontrolę trakcji<br>
+• Kontrolki <b>ABS ACTIVE</b> i <b>TCS ACTIVE</b> zapalają się tylko, gdy system faktycznie zadziała<br>
+<br>
 
-    QPushButton *closeBtn = new QPushButton("Zamknij", &helpDialog);
-    closeBtn->setStyleSheet(
-        "QPushButton { background-color: #0f0; color: black; font-weight: bold; "
-        "padding: 6px 12px; border-radius: 6px; }"
-        "QPushButton:hover { background-color: #1f1; }"
-        );
+<b>Nawierzchnia (Strategy)</b><br>
+• <b>4</b> – Asphalt (Dry)<br>
+• <b>5</b> – Asphalt (Wet)<br>
+• <b>6</b> – Gravel<br>
+• <b>7</b> – Ice<br>
+Aktualna nawierzchnia wpływa na maksymalną siłę hamowania i trakcję.<br>
+<br>
+
+<b>Etap 6 – Nachylenie terenu</b><br>
+• <b>[</b> – zmniejsz nachylenie (bardziej z górki)<br>
+• <b>]</b> – zwiększ nachylenie (bardziej pod górę)<br>
+• Aktualne nachylenie wyświetlane jest w GUI jako <b>Grade: …%</b><br>
+<br>
+
+<b>Trip Computer</b><br>
+• mierzy czas jazdy, dystans, średnią prędkość i spalanie<br>
+• reset danych: przycisk <b>Reset trip</b><br>
+<br>
+
+Symulacja aktualizowana co 20 ms (DT = 0.02 s).
+)");
+    content->setWordWrap(true);
+    content->setTextInteractionFlags(Qt::TextSelectableByMouse);
+
+    // ===== Scroll =====
+    QScrollArea *scroll = new QScrollArea;
+    scroll->setWidgetResizable(true);
+
+    QWidget *scrollWidget = new QWidget;
+    QVBoxLayout *scrollLayout = new QVBoxLayout(scrollWidget);
+    scrollLayout->addWidget(content);
+    scrollLayout->addStretch();
+    scrollWidget->setLayout(scrollLayout);
+
+    scroll->setWidget(scrollWidget);
+
+    // ===== Przycisk =====
+    QPushButton *closeBtn = new QPushButton("Zamknij");
     connect(closeBtn, &QPushButton::clicked, &helpDialog, &QDialog::accept);
 
+    // ===== Layout główny =====
     QVBoxLayout *layout = new QVBoxLayout(&helpDialog);
-    layout->addWidget(info);
-    layout->addWidget(closeBtn, 0, Qt::AlignCenter);
+    layout->addWidget(title);
+    layout->addWidget(scroll, 1);
+    layout->addWidget(closeBtn, 0, Qt::AlignRight);
 
-    helpDialog.setLayout(layout);
     helpDialog.exec();
 }
 
